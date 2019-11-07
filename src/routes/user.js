@@ -1,3 +1,5 @@
-const user_controller = require('../controllers/user');
+const userController = require('../controllers/user');
 
-module.exports = (router) => {};
+module.exports = (router) => {
+    router.post('/auth/create-user', userController.createOne);
+};
