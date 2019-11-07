@@ -9,50 +9,13 @@ describe('UserController Test Suite', () => {
 
     describe('POST /auth/create-user', () => {
         let endPoint;
+        let testData;
 
-        beforeAll(() => endPoint = baseUrl + '/auth/create-user');
-
-        it('should return error status if role is not specified', (done) => {
-            request.post(endPoint, { form: {} }, (error, response, body) => {
-                const realBody = JSON.parse(body);
-
-                expect(response.statusCode).toBe(400);
-                expect(realBody.status).toBe('error');
-                done();
-            });
+        beforeAll(() => {
+            endPoint = baseUrl + '/auth/create-user';
         });
-
-        it('should return error status if department is not specified', (done) => {
-            request.post(endPoint, { form: { role: 'xyz' } }, (error, response, body) => {
-                const realBody = JSON.parse(body);
-
-                expect(response.statusCode).toBe(400);
-                expect(realBody.status).toBe('error');
-                done();
-            });
-        });
-
-        it('should return error status if a non-existing role is specified', (done) => {
-            request.post(endPoint, { form: { role: 'xyz', department: 'xyz' } }, (error, response, body) => {
-                const realBody = JSON.parse(body);
-
-                expect(response.statusCode).toBe(404);
-                expect(realBody.status).toBe('error');
-                done();
-            });
-        });
-
-        it('should return error status if a non-existing department is specified', (done) => {
-            request.post(endPoint, { form: { role: 'staff', department: 'xyz' } }, (error, response, body) => {
-                const realBody = JSON.parse(body);
-
-                expect(response.statusCode).toBe(404);
-                expect(realBody.status).toBe('error');
-                done();
-            });
-        });
-
-        it('should return success status if all required parameters are sent', (done) => {
+        
+        beforeEach(() => {
             const data = {
                 first_name: 'Mark',
                 last_name: 'Spencer',
@@ -64,7 +27,59 @@ describe('UserController Test Suite', () => {
                 department: 'Engineering'
             };
 
-            request.post(endPoint, { form: data }, (error, response, body) => {
+            testData = Object.assign({}, data);
+        });
+
+        it('should return error status if role is not specified', (done) => {
+            testData.role = '';
+
+            request.post(endPoint, { form: testData }, (error, response, body) => {
+                const realBody = JSON.parse(body);
+
+                expect(response.statusCode).toBe(400);
+                expect(realBody.status).toBe('error');
+                done();
+            });
+        });
+
+        it('should return error status if department is not specified', (done) => {
+            testData.department = '';
+
+            request.post(endPoint, { form: testData }, (error, response, body) => {
+                const realBody = JSON.parse(body);
+
+                expect(response.statusCode).toBe(400);
+                expect(realBody.status).toBe('error');
+                done();
+            });
+        });
+
+        it('should return error status if a non-existing role is specified', (done) => {
+            testData.role = 'xyz';
+
+            request.post(endPoint, { form: testData }, (error, response, body) => {
+                const realBody = JSON.parse(body);
+
+                expect(response.statusCode).toBe(404);
+                expect(realBody.status).toBe('error');
+                done();
+            });
+        });
+
+        it('should return error status if a non-existing department is specified', (done) => {
+            testData.department = 'xyz';
+
+            request.post(endPoint, { form: testData }, (error, response, body) => {
+                const realBody = JSON.parse(body);
+
+                expect(response.statusCode).toBe(404);
+                expect(realBody.status).toBe('error');
+                done();
+            });
+        });
+
+        it('should return success status if all required parameters are sent', (done) => {
+            request.post(endPoint, { form: testData }, (error, response, body) => {
                 const realBody = JSON.parse(body);
 
                 expect(response.statusCode).toBe(201);
