@@ -1,4 +1,4 @@
-const article_controller = require('../controllers/article');
+const articleController = require('../controllers/article');
 
 module.exports = (router) => {
     router.get('/', (req, res) => {

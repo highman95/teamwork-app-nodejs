@@ -1,3 +1,3 @@
-const gif_controller = require('../controllers/gif');
+const gifController = require('../controllers/gif');
 
 module.exports = (router) => {};

@@ -1,11 +1,11 @@
-const article_routes = require('./article');
-const gif_routes = require('./gif');
-const user_routes = require('./user');
+const articleRoutes = require('./article');
+const gifRoutes = require('./gif');
+const userRoutes = require('./user');
 
 module.exports = (router) => {
-    article_routes(router);
-    gif_routes(router);
-    user_routes(router);
+    articleRoutes(router);
+    gifRoutes(router);
+    userRoutes(router);
 
     return router;
 };
