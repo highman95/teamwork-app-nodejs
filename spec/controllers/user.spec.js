@@ -19,13 +19,13 @@ describe('UserController Test Suite', () => {
 
         beforeEach(() => {
             let data = {
-                first_name: 'Mark',
-                last_name: 'Spencer',
+                firstName: 'Mark',
+                lastName: 'Spencer',
                 email: 'mark.spencer-' + Date.now() + '@oc.com',
                 password: 'markspencer',
                 gender: 'male',
                 address: '',
-                role: 'staff',
+                jobRole: 'staff',
                 department: 'Engineering'
             };
 
@@ -33,7 +33,7 @@ describe('UserController Test Suite', () => {
         });
 
         it('should return error status if role is not specified', (done) => {
-            testData.role = '';
+            testData.jobRole = '';
 
             request.post(endPoint, { form: testData }, (error, response, body) => {
                 const realBody = JSON.parse(body);
@@ -57,7 +57,7 @@ describe('UserController Test Suite', () => {
         });
 
         it('should return error status if a non-existing role is specified', (done) => {
-            testData.role = 'xyz';
+            testData.jobRole = 'xyz';
 
             request.post(endPoint, { form: testData }, (error, response, body) => {
                 const realBody = JSON.parse(body);
