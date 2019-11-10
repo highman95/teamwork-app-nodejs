@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const db = require('../configs/db');
 
 module.exports = {
@@ -60,5 +61,42 @@ module.exports = {
                 }
             }
         }
-    }
+    },
+
+    signIn: async (req, res) => {
+        const { email, password } = req.body;
+
+        if (email === undefined || email.trim() === '') {
+            res.status(400).json({ status: 'error', error: 'E-mail address cannot be blank' });
+        } else if (password === undefined || password.trim() === '') {
+            res.status(400).json({ status: 'error', error: 'Password cannot be blank' });
+        } else {
+            await db.query('SELECT id, first_name, password FROM users WHERE email = $1', [email], (error, result) => {
+                if (error) {
+                    res.status(500).json({ status: 'error', error: 'E-mail address verification failed' });
+                } else if (result.rowCount == 0) {
+                    res.status(404).json({ status: 'error', error: 'E-mail address cannot be found' });
+                } else {
+                    bcrypt.compare(password, result.rows[0].password, (err, same) => {
+                        if (err) {
+                            res.status(500).json({ status: 'error', error: 'Password verification failed' });
+                        } else if (same) {
+                            try {
+                                const { id: userId, first_name: firstName } = result.rows[0];
+                                const token = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '24h', subject: 'TeamWork-nodeJS' });
+
+                                res.status(200).json({ status: 'success', data: { token, userId, firstName } });
+                            } catch (error) {
+                                res.status(401).json({ status: 'error', error });
+                            }
+                        } else {
+                            res.status(401).json({ status: 'error', error: 'Invalid email and/or password' });
+                        }
+                    });
+                }
+
+                db.end();
+            });
+        }
+    },
 };
