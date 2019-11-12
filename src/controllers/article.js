@@ -3,7 +3,7 @@ const db = require('../configs/db');
 module.exports = {
     createOne: async (req, res) => {
         const status = 'error';
-        const { body: { title, article }, userId = 15 } = req;
+        const { body: { title, article }, userId } = req;
 
         if (title === undefined || title.trim() === '') {
             res.status(400).json({ status, error: 'The title field is mandatory' });
