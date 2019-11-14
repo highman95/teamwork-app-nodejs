@@ -97,4 +97,54 @@ module.exports = {
             });
         }
     },
+
+    getPost: async (req, res) => {
+        const status = 'error';
+        const { params: { gifId } } = req;
+
+        if (gifId === undefined || Number.isNaN(gifId)) {
+            res.status(400).json({ status, error: "The GIF post's unique-id is missing" });
+        } else {
+            await db.query('SELECT id, title, image_url, created_at FROM posts WHERE post_type_id = 1 AND id = $1', [gifId], (errP, resultP) => {
+                try {
+                    if (errP) {
+                        throw errP;
+                    }
+
+                    if (resultP.rowCount === 0) {
+                        res.status(404).json({ status, error: 'The GIF post cannot be found' });
+                    } else {
+                        let comments = [];
+
+                        db.query('SELECT id, comment, user_id FROM comments WHERE post_id = $1', [gifId], (errC, resultC) => {
+                            try {
+                                if (!errC && resultC.rowCount > 0) {
+                                    comments = resultC.rows.map((row) => {
+                                        const { id: commentId, comment, user_id: authorId } = row;
+                                        return { commentId, comment, authorId };
+                                    });
+                                }
+
+                                const {
+                                    id, title, image_url: imageUrl, created_at: createdOn,
+                                } = resultP.rows[0];
+
+                                res.status(200).json({
+                                    status: 'success',
+                                    data: {
+                                        id, createdOn, title, imageUrl, comments,
+                                    },
+                                });
+                            } catch (e) {
+                                console.error('[Comments] DB-Error: ', e.message || e.error.message);
+                            }
+                        });
+                    }
+                } catch (e2) {
+                    console.error('[Posts] DB-Error: ', e2.message || e2.error.message);
+                    res.status(500).json({ status, error: 'The GIF post could not be retrieved' });
+                }
+            });
+        }
+    },
 };
