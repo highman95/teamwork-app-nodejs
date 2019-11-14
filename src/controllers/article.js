@@ -31,6 +31,62 @@ module.exports = {
         }
     },
 
+    /**
+     * Register a comment for a single article post
+     *
+     * @author Emma Nwamaife
+     *
+     * @param req The httpRequest Object
+     * @param res The httpResponse object
+     * @returns The httpResponse object
+     */
+    createPostComment: (req, res) => {
+        const status = 'error';
+        const { params: { articleId }, body: { comment }, userId } = req;
+
+        if (articleId === undefined || Number.isSafeInteger(articleId)) {
+            res.status(400).json({ status, error: "The article's unique-id is missing" });
+        } else if (comment === undefined || comment.trim() === '') {
+            res.status(400).json({ status, error: "The article's comment cannot be blank" });
+        } else {
+            db.query('SELECT title, content FROM posts WHERE post_type_id = 2 AND id = $1', [articleId], (errP, resultP) => {
+                try {
+                    if (errP) {
+                        throw errP;
+                    }
+
+                    if (resultP.rowCount === 0) {
+                        res.status(404).json({ status, error: 'The article was not found' });
+                    } else {
+                        db.query('INSERT INTO comments (comment, post_id, user_id) VALUES ($1, $2, $3) RETURNING created_at', [comment, articleId, userId], (errC, resultC) => {
+                            try {
+                                if (errC) {
+                                    throw errC;
+                                }
+
+                                const { title: articleTitle, content: article } = resultP.rows[0];
+                                const { created_at: createdOn } = resultC.rows[0];
+
+                                res.status(201).json({
+                                    status: 'success',
+                                    data: {
+                                        message: 'Comment successfully created', createdOn, articleTitle, article, comment,
+                                    },
+                                });
+                            } catch (eC) {
+                                console.error('[Comment] DB-Error', eC.message || eC.error.message);
+                                res.status(500).json({ status, error: "The article's comment could not be saved" });
+                            }
+                        });
+                    }
+                } catch (eP) {
+                    console.error('[Post] DB-Error', eP.message || eP.error.message);
+                    res.status(500).json({ status, error: 'The article could not be retrieved' });
+                }
+            });
+        }
+    },
+
     getPost: async (req, res) => {
         const status = 'error';
         const { params: { articleId } } = req;
