@@ -41,4 +41,60 @@ module.exports = {
             });
         }
     },
+
+    /**
+     * Register a comment for a specific gif post
+     *
+     * @author Emma Nwamaife
+     *
+     * @param req The httpRequest Object
+     * @param res The httpResponse object
+     * @returns The httpResponse object
+     */
+    createPostComment: (req, res) => {
+        const status = 'error';
+        const { params: { gifId }, body: { comment }, userId } = req;
+
+        if (gifId === undefined || Number.isSafeInteger(gifId)) {
+            res.status(400).json({ status, error: "The gif post's unique-id is missing" });
+        } else if (comment === undefined || comment.trim() === '') {
+            res.status(400).json({ status, error: "The gif post's comment cannot be blank" });
+        } else {
+            db.query('SELECT title FROM posts WHERE post_type_id = 1 AND id = $1', [gifId], (errP, resultP) => {
+                try {
+                    if (errP) {
+                        throw errP;
+                    }
+
+                    if (resultP.rowCount === 0) {
+                        res.status(404).json({ status, error: 'The gif post was not found' });
+                    } else {
+                        db.query('INSERT INTO comments (comment, post_id, user_id) VALUES ($1, $2, $3) RETURNING created_at', [comment, gifId, userId], (errC, resultC) => {
+                            try {
+                                if (errC) {
+                                    throw errC;
+                                }
+
+                                const { title: gifTitle } = resultP.rows[0];
+                                const { created_at: createdOn } = resultC.rows[0];
+
+                                res.status(201).json({
+                                    status: 'success',
+                                    data: {
+                                        message: 'Comment successfully created', createdOn, gifTitle, comment,
+                                    },
+                                });
+                            } catch (eC) {
+                                console.error('[Comment] DB-Error', eC.message || eC.error.message);
+                                res.status(500).json({ status, error: "The GIF post's comment could not be saved" });
+                            }
+                        });
+                    }
+                } catch (eP) {
+                    console.error('[Post] DB-Error', eP.message || eP.error.message);
+                    res.status(500).json({ status, error: 'The GIF post could not be retrieved' });
+                }
+            });
+        }
+    },
 };
