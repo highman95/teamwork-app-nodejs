@@ -110,4 +110,65 @@ describe('ArticleController Test Suite', () => {
             it('should return the time-created', () => expect(responseBox.body.data.createdOn).toBeDefined());
         });
     });
+
+
+    describe('POST /articles/:articleId/comment', () => {
+        let testData = {};
+
+        beforeEach(() => {
+            const data = { comment: 'it is just a comment' };
+            testData = Object.assign({}, data);
+        });
+
+        describe('Article comment is not specified', () => {
+            let responseBox = {};
+
+            beforeAll((done) => {
+                testData.comment = '';
+
+                request.post({ url: `${endPoint}/0/comment`, ...options, form: testData }, (error, response, body) => {
+                    responseBox = { response, body: JSON.parse(body) };
+                    done();
+                });
+            });
+
+            it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
+            it('should return error status', () => expect(responseBox.body.status).toBe('error'));
+        });
+
+        describe('Article comment is specified', () => {
+            let responseBox = {};
+
+            beforeAll((done) => {
+                request.post({ url: `${endPoint}/3/comment`, ...options, form: testData }, (error, response, body) => {
+                    responseBox = { response, body: JSON.parse(body) };
+                    done();
+                });
+            });
+
+            it('should return statusCode 201', () => expect(responseBox.response.statusCode).toBe(201));
+            it('should return success status', () => expect(responseBox.body.status).toBe('success'));
+            it('should return the same comment', () => expect(testData.comment === responseBox.body.data.comment).toBeTruthy());
+            it('should return the article post\'s title', () => expect(responseBox.body.data.articleTitle).toBeDefined());
+            it('should return the time-created', () => expect(responseBox.body.data.createdOn).toBeDefined());
+        });
+    });
+
+
+    describe('DELETE /articles/:articleId', () => {
+        describe('Article id is specified', () => {
+            let responseBox = {};
+
+            beforeAll((done) => {
+                request.post({ url: `${endPoint}/3`, ...options }, (error, response, body) => {
+                    responseBox = { response, body: JSON.parse(body) };
+                    done();
+                });
+            });
+
+            it('should return statusCode 200', () => expect(responseBox.response.statusCode).toBe(200));
+            it('should return success status', () => expect(responseBox.body.status).toBe('success'));
+            it('should return a message', () => expect(responseBox.body.data.message).toBeDefined());
+        });
+    });
 });
