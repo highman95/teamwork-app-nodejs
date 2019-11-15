@@ -126,13 +126,13 @@ module.exports = {
                                 }
 
                                 const {
-                                    id, title, image_url: imageUrl, created_at: createdOn,
+                                    id, title, image_url: url, created_at: createdOn,
                                 } = resultP.rows[0];
 
                                 res.status(200).json({
                                     status: 'success',
                                     data: {
-                                        id, createdOn, title, imageUrl, comments,
+                                        id, createdOn, title, url, comments,
                                     },
                                 });
                             } catch (e) {
