@@ -147,4 +147,27 @@ module.exports = {
             });
         }
     },
+
+    deletePost: (req, res) => {
+        const status = 'error';
+        const { params: { gifId } } = req;
+
+        if (gifId === undefined || Number.isSafeInteger(gifId)) {
+            res.status(400).json({ status, error: '' });
+        } else {
+            db.query('DELETE FROM posts WHERE post_type_id = 1 AND id = $1 RETURNING title', [gifId], (err, result) => {
+                try {
+                    if (err) {
+                        throw err;
+                    }
+
+                    const reportMessage = result.rowCount < 0 ? 'not' : '';
+                    res.status(200).json({ status: 'success', data: { message: `GIF post ${reportMessage} successfully deleted` } });
+                } catch (e) {
+                    console.log('[Posts-Del] DB-Error: ', e.message || e.error.message);
+                    res.status(500).json({ status, error: 'The GIF post could not be deleted' });
+                }
+            });
+        }
+    },
 };
