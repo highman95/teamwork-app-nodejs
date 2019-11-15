@@ -87,6 +87,54 @@ module.exports = {
         }
     },
 
+    updatePost: async (req, res) => {
+        const status = 'error';
+        const { params: { articleId }, body: { title, article } } = req;
+
+        if (articleId === undefined || Number.isSafeInteger(articleId)) {
+            res.status(400).json({ status, error: "The article's unique-id is missing" });
+        } else if (title === undefined || title.trim() === '') {
+            res.status(400).json({ status, error: 'The title field is mandatory' });
+        } else if (article === undefined || article.trim() === '') {
+            res.status(400).json({ status, error: "The article's content is missing" });
+        } else {
+            await db.query('SELECT id, title, content, created_at FROM posts WHERE id = $1', [articleId], (errP, resultP) => {
+                try {
+                    if (errP) {
+                        throw errP;
+                    }
+
+                    if (resultP.rowCount === 0) {
+                        res.status(404).json({ status, error: 'The article no longer exists' });
+                    } else {
+                        db.query('UPDATE posts SET title = $1, content = $2 WHERE id = $3 RETURNING id', [title, article, articleId], (err, result) => {
+                            try {
+                                if (err) {
+                                    throw err;
+                                }
+
+                                const reportMessage = result.rowCount < 0 ? 'not ' : '';
+
+                                res.status(200).json({
+                                    status: 'success',
+                                    data: {
+                                        message: `Article ${reportMessage}successfully updated`, title, article,
+                                    },
+                                });
+                            } catch (e) {
+                                console.error('[Post-Patch] DB-Error', e.message || e.error.message);
+                                res.status(500).json({ status, error: 'The article could not be updated' });
+                            }
+                        });
+                    }
+                } catch (e2) {
+                    console.error('[Posts] DB-Error: ', e2.message || e2.error.message);
+                    res.status(500).json({ status, error: 'The article could not be retrieved' });
+                }
+            });
+        }
+    },
+
     getPost: async (req, res) => {
         const status = 'error';
         const { params: { articleId } } = req;
