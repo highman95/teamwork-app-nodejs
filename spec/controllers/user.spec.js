@@ -1,4 +1,5 @@
 require('dotenv').config();
+
 const request = require('request');
 const jwt = require('jsonwebtoken');
 const baseUrl = "http://localhost:3500/api/v1";
@@ -12,9 +13,13 @@ describe('UserController Test Suite', () => {
 
     describe('POST /auth/create-user', () => {
         let testData;
+        let options = {};
 
         beforeAll(() => {
             endPoint = baseUrl + '/auth/create-user';
+
+            const token = jwt.sign({ userId: 1 }, process.env.JWT_SECRET);
+            options = { headers: { token } };
         });
 
         beforeEach(() => {
@@ -32,62 +37,82 @@ describe('UserController Test Suite', () => {
             testData = Object.assign({}, data);
         });
 
-        it('should return error status if role is not specified', (done) => {
-            testData.jobRole = '';
+        describe('role is not specified', () => {
+            let responseBox = {};
 
-            request.post(endPoint, { form: testData }, (error, response, body) => {
-                const realBody = JSON.parse(body);
+            beforeAll((done) => {
+                testData.jobRole = '';
 
-                expect(response.statusCode).toBe(400);
-                expect(realBody.status).toBe('error');
-                done();
+                request.post({ url: endPoint, ...options, form: testData }, (error, response, body) => {
+                    responseBox = { error, response, body: JSON.parse(body) };
+                    done();
+                });
             });
+
+            it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
+            it('should return error status', () => expect(responseBox.body.status).toBe('error'));
         });
 
-        it('should return error status if department is not specified', (done) => {
-            testData.department = '';
+        describe('department is not specified', () => {
+            let responseBox = {};
 
-            request.post(endPoint, { form: testData }, (error, response, body) => {
-                const realBody = JSON.parse(body);
+            beforeAll((done) => {
+                testData.department = '';
 
-                expect(response.statusCode).toBe(400);
-                expect(realBody.status).toBe('error');
-                done();
+                request.post({ url: endPoint, ...options, form: testData }, (error, response, body) => {
+                    responseBox = { error, response, body: JSON.parse(body) };
+                    done();
+                });
             });
+
+            it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
+            it('should return error status', () => expect(responseBox.body.status).toBe('error'));
         });
 
-        it('should return error status if a non-existing role is specified', (done) => {
-            testData.jobRole = 'xyz';
+        describe('a non-existing role is specified', () => {
+            let responseBox = {};
 
-            request.post(endPoint, { form: testData }, (error, response, body) => {
-                const realBody = JSON.parse(body);
-
-                expect(response.statusCode).toBe(404);
-                expect(realBody.status).toBe('error');
-                done();
+            beforeAll((done) => {
+                testData.jobRole = 'xyz';
+                request.post({ url: endPoint, ...options, form: testData }, (error, response, body) => {
+                    responseBox = { response, body: JSON.parse(body) };
+                    done();
+                });
             });
+
+            it('should return statusCode 404', () => expect(responseBox.response.statusCode).toBe(404));
+            it('should return error status', () => expect(responseBox.body.status).toBe('error'));
         });
 
-        it('should return error status if a non-existing department is specified', (done) => {
-            testData.department = 'xyz';
+        describe('a non-existing department is specified', () => {
+            let responseBox = {};
 
-            request.post(endPoint, { form: testData }, (error, response, body) => {
-                const realBody = JSON.parse(body);
-
-                expect(response.statusCode).toBe(404);
-                expect(realBody.status).toBe('error');
-                done();
+            beforeAll((done) => {
+                testData.department = 'xyz';
+                request.post({ url: endPoint, ...options, form: testData }, (error, response, body) => {
+                    responseBox = { error, response, body: JSON.parse(body) };
+                    done();
+                });
             });
+
+            it('should return statusCode 404', () => expect(responseBox.response.statusCode).toBe(404));
+            it('should return error status', () => expect(realBody.status).toBe('error'));
         });
 
-        it('should return success status if all required parameters are sent', (done) => {
-            request.post(endPoint, { form: testData }, (error, response, body) => {
-                const realBody = JSON.parse(body);
+        describe('all required parameters are sent', () => {
+            let responseBox = {};
 
-                expect(response.statusCode).toBe(201);
-                expect(realBody.status).toBe('success');
+            beforeAll((done) => {
+                request.post({ url: endPoint, ...options, form: testData }, (error, response, body) => {
+                    responseBox = { error, response, body: JSON.parse(body) };
+                    done();
+                });
                 done();
             });
+
+            it('should return statusCode 201', () => expect(responseBox.response.statusCode).toBe(201));
+            it('should return success status', () => expect(responseBox.body.status).toBe('success'));
+            it('should return the new user\'s unique-identifier', () => expect(responseBox.body.data.userId).toBeDefined());
         });
     });
 
@@ -107,53 +132,76 @@ describe('UserController Test Suite', () => {
             testCredentials = Object.assign({}, data);
         });
 
-        it('should fail authentication if email input is blank', (done) => {
-            testCredentials.email = '';
+        describe('email input is blank', () => {
+            let responseBox;
 
-            request.post(endPoint, { form: testCredentials }, (error, response, body) => {
-                const realBody = JSON.parse(body);
+            beforeAll((done) => {
+                testCredentials.email = '';
 
-                expect(response.statusCode).toBe(400);
-                expect(realBody.status).toBe('error');
-                done();
+                request.post(endPoint, { form: testCredentials }, (error, response, body) => {
+                    responseBox = { error, response, body: JSON.parse(body) };
+                    done();
+                });
             });
+
+            it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
+            it('should return error status', () => expect(responseBox.body.status).toBe('error'));
         });
 
-        it('should fail authentication if an invalid email is supplied', (done) => {
-            testCredentials.email = 'i-do-code@me.com';
+        describe('an invalid email is supplied', () => {
+            let responseBox;
 
-            request.post(endPoint, { form: testCredentials }, (error, response, body) => {
-                const realBody = JSON.parse(body);
+            beforeAll((done) => {
+                testCredentials.email = 'i-do-code@me.com';
 
-                expect(response.statusCode).toBe(404);
-                expect(realBody.status).toBe('error');
-                done();
+                request.post(endPoint, { form: testCredentials }, (error, response, body) => {
+                    responseBox = { error, response, body: JSON.parse(body) };
+                    done();
+                });
             });
+
+            it('should return statusCode 404', () => expect(responseBox.response.statusCode).toBe(404));
+            it('should return error status', () => expect(responseBox.body.status).toBe('error'));
         });
 
-        it('should fail authentication if blank(invalid) password is supplied', (done) => {
-            testCredentials.password = '';
+        describe('blank(invalid) password is supplied', () => {
+            let responseBox;
 
-            request.post(endPoint, { form: testCredentials }, (error, response, body) => {
-                const realBody = JSON.parse(body);
+            beforeAll((done) => {
+                testCredentials.password = '';
 
-                expect(response.statusCode).toBe(400);
-                expect(realBody.status).toBe('error');
-                done();
+                request.post(endPoint, { form: testCredentials }, (error, response, body) => {
+                    responseBox = { error, response, body: JSON.parse(body) };
+                    done();
+                });
             });
+
+            it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
+            it('should return error status', () => expect(responseBox.body.status).toBe('error'));
         });
 
-        it('should pass authentication if valid credentials are supplied', (done) => {
-            request.post(endPoint, { form: data }, (error, response, body) => {
-                const realBody = JSON.parse(body);
-                const decodedToken = jwt.verify(realBody.data.token, process.env.JWT_SECRET);
+        describe('valid credentials are supplied', () => {
+            let responseBox;
 
-                expect(response.statusCode).toBe(200);
-                expect(realBody.status).toBe('success');
-                expect(realBody.data.token).not.toBe(undefined);
-                expect((decodedToken.userId === realBody.data.userId)).toBeTruthy();// verify token with expected value
-                done();
+            beforeAll((done) => {
+                request.post(endPoint, { form: testCredentials }, (error, response, body) => {
+                    responseBox = { error, response, body: JSON.parse(body) };
+                    done();
+                });
             });
+
+            const isValidUser;
+            try {
+                const decodedToken = jwt.verify(responseBox.body.data.token, process.env.JWT_SECRET);
+                isValidUser = (decodedToken.userId === realBody.data.userId);
+            } catch (e) {
+                isValidUser = false;
+            }
+
+            it('should return statusCode 200', () => expect(responseBox.response.statusCode).toBe(200));
+            it('should return success status', () => expect(responseBox.body.status).toBe('success'));
+            it('should return an authentication token', () => expect(responseBox.body.data.token).toBeDefined());
+            it('should return a valid user-id', () => expect(isValidUser).toBeTruthy());// verify token with expected value
         });
     });
 });
