@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const fs = require('fs');
 const request = require('request');
 const jwt = require('jsonwebtoken');
 const baseUrl = "http://localhost:3500/api/v1";
@@ -7,6 +8,7 @@ const baseUrl = "http://localhost:3500/api/v1";
 describe('GifController Test Suite', () => {
     let endPoint;
     let options = {};
+    let gifId;
 
     beforeAll(() => {
         endPoint = baseUrl + '/gifs';
@@ -19,9 +21,10 @@ describe('GifController Test Suite', () => {
         let testFormData = {};
 
         beforeEach(() => {
-            let data = new FormData();
-            data.append('title', 'Once upon a time in Tokyo');
-            data.append('image', Buffer.from('public/images/sample.gif'));
+            let data = {
+                title: 'Once upon a time in Tokyo',
+                image: fs.createReadStream('public/images/sample.gif')
+            }
 
             testFormData = Object.assign({}, data);
         });
@@ -30,9 +33,9 @@ describe('GifController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                testFormData.append('title', '');
+                testFormData.title = '';
 
-                request.post(endPoint, { formData: testFormData }, (error, response, body) => {
+                request.post({ url: endPoint, ...options, formData: testFormData }, (error, response, body) => {
                     responseBox = { response, body: JSON.parse(body) };
                     done();
                 });
@@ -46,9 +49,9 @@ describe('GifController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                testFormData.append('image', '');
+                testFormData.image = '';
 
-                request.post(endPoint, { formData: testFormData }, (error, response, body) => {
+                request.post({ url: endPoint, ...options, formData: testFormData }, (error, response, body) => {
                     responseBox = { response, body: JSON.parse(body) };
                     done();
                 });
@@ -62,9 +65,9 @@ describe('GifController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                testFormData.append('image', Buffer.from('public/images/sample.jpg'));
+                testFormData.image = fs.createReadStream('public/images/sample.jpg');
 
-                request.post(endPoint, { formData: testFormData }, (error, response, body) => {
+                request.post({ url: endPoint, ...options, formData: testFormData }, (error, response, body) => {
                     responseBox = { response, body: JSON.parse(body) };
                     done();
                 });
@@ -78,11 +81,12 @@ describe('GifController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.post(endPoint, { formData: testFormData }, (error, response, body) => {
+                request.post({ url: endPoint, ...options, formData: testFormData }, (error, response, body) => {
                     responseBox = { response, body: JSON.parse(body) };
+                    gifId = responseBox.body.data.gifId;
                     done();
                 });
-            });
+            }, 15000);
 
             it('should return statusCode 201', () => expect(responseBox.response.statusCode).toBe(201));
             it('should return success status', () => expect(responseBox.body.status).toBe('success'));
@@ -112,7 +116,7 @@ describe('GifController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.get({ url: `${endPoint}/24`, ...options }, (error, response, body) => {
+                request.get({ url: `${endPoint}/${gifId}`, ...options }, (error, response, body) => {
                     responseBox = { response, body: JSON.parse(body) };
                     done();
                 });
@@ -142,7 +146,7 @@ describe('GifController Test Suite', () => {
             beforeAll((done) => {
                 testData.comment = '';
 
-                request.post({ url: `${endPoint}/0/comment`, ...options, form: testData }, (error, response, body) => {
+                request.post({ url: `${endPoint}/${gifId}/comment`, ...options, form: testData }, (error, response, body) => {
                     responseBox = { response, body: JSON.parse(body) };
                     done();
                 });
@@ -156,7 +160,7 @@ describe('GifController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.post({ url: `${endPoint}/3/comment`, ...options, form: testData }, (error, response, body) => {
+                request.post({ url: `${endPoint}/${gifId}/comment`, ...options, form: testData }, (error, response, body) => {
                     responseBox = { response, body: JSON.parse(body) };
                     done();
                 });
@@ -176,7 +180,7 @@ describe('GifController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.delete({ url: `${endPoint}/3`, ...options }, (error, response, body) => {
+                request.delete({ url: `${endPoint}/${gifId}`, ...options }, (error, response, body) => {
                     responseBox = { response, body: JSON.parse(body) };
                     done();
                 });

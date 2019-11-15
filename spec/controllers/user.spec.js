@@ -6,13 +6,17 @@ const baseUrl = "http://localhost:3500/api/v1";
 
 describe('UserController Test Suite', () => {
     let endPoint;
+    let testCredentialsX = {};
 
-    beforeAll(() => { });
-
-    afterAll(() => { });
+    beforeAll(() => {
+        testCredentialsX = {
+            email: 'mark.spencer-' + Date.now() + '@oc.com',
+            password: 'markspencer'
+        };
+    });
 
     describe('POST /auth/create-user', () => {
-        let testData;
+        let testData = {};
         let options = {};
 
         beforeAll(() => {
@@ -26,8 +30,7 @@ describe('UserController Test Suite', () => {
             let data = {
                 firstName: 'Mark',
                 lastName: 'Spencer',
-                email: 'mark.spencer-' + Date.now() + '@oc.com',
-                password: 'markspencer',
+                ...testCredentialsX,
                 gender: 'male',
                 address: '',
                 jobRole: 'staff',
@@ -96,7 +99,7 @@ describe('UserController Test Suite', () => {
             });
 
             it('should return statusCode 404', () => expect(responseBox.response.statusCode).toBe(404));
-            it('should return error status', () => expect(realBody.status).toBe('error'));
+            it('should return error status', () => expect(responseBox.body.status).toBe('error'));
         });
 
         describe('all required parameters are sent', () => {
@@ -107,7 +110,6 @@ describe('UserController Test Suite', () => {
                     responseBox = { error, response, body: JSON.parse(body) };
                     done();
                 });
-                done();
             });
 
             it('should return statusCode 201', () => expect(responseBox.response.statusCode).toBe(201));
@@ -117,19 +119,14 @@ describe('UserController Test Suite', () => {
     });
 
     describe('POST /auth/signin', () => {
-        let testCredentials;
+        let testCredentials = {}
 
         beforeAll(() => {
             endPoint = baseUrl + '/auth/signin';
         });
 
         beforeEach(() => {
-            data = {
-                email: 'mark.spencer-1573098608494@oc.com',
-                password: 'markspencer'
-            };
-
-            testCredentials = Object.assign({}, data);
+            testCredentials = Object.assign({}, testCredentialsX);
         });
 
         describe('email input is blank', () => {
@@ -190,18 +187,21 @@ describe('UserController Test Suite', () => {
                 });
             });
 
-            const isValidUser;
-            try {
-                const decodedToken = jwt.verify(responseBox.body.data.token, process.env.JWT_SECRET);
-                isValidUser = (decodedToken.userId === realBody.data.userId);
-            } catch (e) {
-                isValidUser = false;
-            }
 
             it('should return statusCode 200', () => expect(responseBox.response.statusCode).toBe(200));
             it('should return success status', () => expect(responseBox.body.status).toBe('success'));
             it('should return an authentication token', () => expect(responseBox.body.data.token).toBeDefined());
-            it('should return a valid user-id', () => expect(isValidUser).toBeTruthy());// verify token with expected value
+            it('should return a valid user-id', () => {// verify token with expected value
+                let isValidUser;
+                try {
+                    const decodedToken = jwt.verify(responseBox.body.data.token, process.env.JWT_SECRET);
+                    isValidUser = (decodedToken.userId === responseBox.body.data.userId);
+                } catch (e) {
+                    isValidUser = false;
+                }
+
+                expect(isValidUser).toBeTruthy();
+            });
         });
     });
 });

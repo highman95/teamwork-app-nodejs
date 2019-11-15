@@ -7,6 +7,7 @@ const baseUrl = "http://localhost:3500/api/v1";
 describe('ArticleController Test Suite', () => {
     let endPoint;
     let options = {};
+    let articleId;
 
     beforeAll(() => {
         endPoint = baseUrl + '/articles';
@@ -65,6 +66,7 @@ describe('ArticleController Test Suite', () => {
             beforeAll((done) => {
                 request.post({ url: endPoint, ...options, form: testData }, (error, response, body) => {
                     responseBox = { response, body: JSON.parse(body) };
+                    articleId = responseBox.body.data.articleId;//set the test article-id
                     done();
                 });
             });
@@ -97,7 +99,7 @@ describe('ArticleController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.get({ url: `${endPoint}/3`, ...options }, (error, response, body) => {
+                request.get({ url: `${endPoint}/${articleId}`, ...options }, (error, response, body) => {
                     responseBox = { response, body: JSON.parse(body) };
                     done();
                 });
@@ -126,7 +128,7 @@ describe('ArticleController Test Suite', () => {
             beforeAll((done) => {
                 testData.comment = '';
 
-                request.post({ url: `${endPoint}/0/comment`, ...options, form: testData }, (error, response, body) => {
+                request.post({ url: `${endPoint}/${articleId}/comment`, ...options, form: testData }, (error, response, body) => {
                     responseBox = { response, body: JSON.parse(body) };
                     done();
                 });
@@ -140,7 +142,7 @@ describe('ArticleController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.post({ url: `${endPoint}/3/comment`, ...options, form: testData }, (error, response, body) => {
+                request.post({ url: `${endPoint}/${articleId}/comment`, ...options, form: testData }, (error, response, body) => {
                     responseBox = { response, body: JSON.parse(body) };
                     done();
                 });
@@ -156,11 +158,11 @@ describe('ArticleController Test Suite', () => {
 
 
     describe('DELETE /articles/:articleId', () => {
-        describe('Article id is specified', () => {
+        describe('article-id is specified', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.post({ url: `${endPoint}/3`, ...options }, (error, response, body) => {
+                request.delete({ url: `${endPoint}/${articleId}`, ...options }, (error, response, body) => {
                     responseBox = { response, body: JSON.parse(body) };
                     done();
                 });
