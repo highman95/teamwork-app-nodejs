@@ -1,7 +1,7 @@
 const db = require('../configs/db');
 
 module.exports = {
-    createOne: async (req, res) => {
+    createPost: async (req, res) => {
         const status = 'error';
         const { body: { title, article }, userId } = req;
 
@@ -13,7 +13,7 @@ module.exports = {
             await db.query('INSERT INTO posts (title, content, post_type_id, user_id) VALUES ($1, $2, $3, $4) RETURNING id, content, created_at', [title, article, 2, userId], (err, result) => {
                 try {
                     if (err) {
-                        throw new Error('The article could not be saved...');
+                        throw err;
                     }
 
                     const { id: articleId, created_at: createdOn } = result.rows[0];
@@ -24,8 +24,9 @@ module.exports = {
                             message: 'Article successfully posted', articleId, title, createdOn,
                         },
                     });
-                } catch (error) {
-                    res.status(500).json({ status, error: error.message });
+                } catch (e) {
+                    console.error('DB-Error: ', e.message || e.error.message);
+                    res.status(500).json({ status, error: 'The article could not be saved' });
                 }
             });
         }
@@ -145,7 +146,7 @@ module.exports = {
             await db.query('SELECT id, title, content, created_at FROM posts WHERE id = $1', [articleId], (err, resultP) => {
                 try {
                     if (err) {
-                        throw new Error('The article could not be retrieved');
+                        throw err;
                     }
 
                     if (resultP.rowCount === 0) {
@@ -179,7 +180,7 @@ module.exports = {
                     }
                 } catch (e2) {
                     console.error('[Posts] DB-Error: ', e2.message || e2.error.message);
-                    res.status(500).json({ status, error: e2.message || e2.error.message });
+                    res.status(500).json({ status, error: 'The article could not be retrieved' });
                 }
             });
         }
