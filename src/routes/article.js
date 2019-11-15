@@ -5,4 +5,5 @@ module.exports = (router) => {
     router.post('/articles', auth, articleController.createOne);
     router.post('/articles/:articleId/comment', auth, articleController.createPostComment);
     router.get('/articles/:articleId', auth, articleController.getPost);
+    router.delete('/articles/:articleId', auth, articleController.deletePost);
 };

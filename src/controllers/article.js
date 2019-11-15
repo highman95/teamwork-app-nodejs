@@ -136,4 +136,27 @@ module.exports = {
             });
         }
     },
+
+    deletePost: (req, res) => {
+        const status = 'error';
+        const { params: { articleId } } = req;
+
+        if (articleId === undefined || Number.isSafeInteger(articleId)) {
+            res.status(400).json({ status, error: "The article's unique-id is missing" });
+        } else {
+            db.query('DELETE FROM posts WHERE post_type_id = 2 AND id = $1 RETURNING title', [articleId], (err, result) => {
+                try {
+                    if (err) {
+                        throw err;
+                    }
+
+                    const reportMessage = result.rowCount < 0 ? 'not ' : '';
+                    res.status(200).json({ status: 'success', data: { message: `Article ${reportMessage}successfully deleted` } });
+                } catch (e) {
+                    console.log('[Posts-Del] DB-Error: ', e.message || e.error.message);
+                    res.status(500).json({ status, error: 'The article could not be deleted' });
+                }
+            });
+        }
+    },
 };
