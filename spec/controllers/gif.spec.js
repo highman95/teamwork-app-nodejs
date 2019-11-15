@@ -1,4 +1,7 @@
+require('dotenv').config();
+
 const request = require('request');
+const jwt = require('jsonwebtoken');
 const baseUrl = "http://localhost:3500/api/v1";
 
 describe('GifController Test Suite', () => {
