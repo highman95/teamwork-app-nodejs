@@ -21,4 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api/v1', routes(router));
 
+// set a default route
+app.use('*', (req, res) => res.status(404).json({ status: 'error', error: 'Page no longer exists' }));
+
 module.exports = app;
