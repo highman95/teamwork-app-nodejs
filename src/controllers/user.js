@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require('../configs/db');
 
+const generateToken = (payload) => jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h', subject: 'TeamWork-nodeJS' });
+
 module.exports = {
     createOne: (req, res) => {
         const {
@@ -39,13 +41,21 @@ module.exports = {
                                     address, roleId, departmentId,
                                 ];
 
-                                db.query('INSERT INTO users (first_name, last_name, email, password, gender, address, role_id, department_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', input).then(() => {
-                                    res.status(201).json({ status: 'success', data: { message: 'User account successfully created', token: `${firstName} ${lastName}`, userId: 0 } });
+                                db.query('INSERT INTO users (first_name, last_name, email, password, gender, address, role_id, department_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id', input).then((result) => {
+                                    try {
+                                        const { id: userId } = result.rows[0];
+                                        const token = generateToken({ userId });
+
+                                        res.status(201).json({ status: 'success', data: { message: 'User account successfully created', token, userId } });
+                                    } catch (e2) {
+                                        console.error(e2.message || e2.error.message);
+                                        res.status(500).json({ status: 'error', error: 'The new user-account token could not be generated' });
+                                    }
                                 }).catch(() => {
                                     res.status(400).json({ status: 'error', error: 'The user information could not be saved' });
                                 });
                             }).catch(() => {
-                                res.status(500).json({ status: 'error', error: 'The password could not be encrpted' });
+                                res.status(500).json({ status: 'error', error: 'The password could not be encrypted' });
                             });
                         }
                     }).catch(() => {
@@ -74,15 +84,17 @@ module.exports = {
                 } else {
                     bcrypt.compare(password, result.rows[0].password, (err, same) => {
                         if (err) {
+                            console.error(err.message || err.error.message);
                             res.status(500).json({ status: 'error', error: 'Password verification failed' });
                         } else if (same) {
                             try {
                                 const { id: userId, first_name: firstName } = result.rows[0];
-                                const token = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '24h', subject: 'TeamWork-nodeJS' });
+                                const token = generateToken({ userId });
 
                                 res.status(200).json({ status: 'success', data: { token, userId, firstName } });
-                            } catch (error2) {
-                                res.status(401).json({ status: 'error', error: error2 });
+                            } catch (e2) {
+                                console.error('', e2.message || e2.error.message);
+                                res.status(500).json({ status: 'error', error: 'Personal information could not be retrieved' });
                             }
                         } else {
                             res.status(401).json({ status: 'error', error: 'Invalid email and/or password' });
