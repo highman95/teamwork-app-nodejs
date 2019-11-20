@@ -4,10 +4,9 @@
     "description": "Teamwork app (built with NodeJS)",
     "main": "src/index.js",
     "scripts": {
-        "start": "cross-env NODE_ENV=development node src/index.js",
+        "start": "cross-env node src/index.js",
         "start-dev": "cross-env NODE_ENV=development nodemon",
         "test": "jasmine",
-        "build": "cross-env NODE_ENV=production node",
         "lint": "eslint src/**/*.js --fix"
     },
     "repository": {
