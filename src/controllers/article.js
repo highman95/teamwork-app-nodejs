@@ -45,7 +45,7 @@ module.exports = {
         const status = 'error';
         const { params: { articleId }, body: { comment }, userId } = req;
 
-        if (articleId === undefined || Number.isSafeInteger(articleId)) {
+        if (articleId === undefined || articleId === "undefined" || Number.isNaN(articleId)) {
             res.status(400).json({ status, error: "The article's unique-id is missing" });
         } else if (comment === undefined || comment.trim() === '') {
             res.status(400).json({ status, error: "The article's comment cannot be blank" });
@@ -92,7 +92,7 @@ module.exports = {
         const status = 'error';
         const { params: { articleId }, body: { title, article } } = req;
 
-        if (articleId === undefined || Number.isSafeInteger(articleId)) {
+        if (articleId === undefined || articleId === "undefined" || Number.isNaN(articleId)) {
             res.status(400).json({ status, error: "The article's unique-id is missing" });
         } else if (title === undefined || title.trim() === '') {
             res.status(400).json({ status, error: 'The title field is mandatory' });
@@ -140,7 +140,7 @@ module.exports = {
         const status = 'error';
         const { params: { articleId } } = req;
 
-        if (articleId === undefined || Number.isNaN(articleId)) {
+        if (articleId === undefined || articleId === "undefined" || Number.isNaN(articleId)) {
             res.status(400).json({ status, error: "The article's unique-id is missing" });
         } else {
             await db.query('SELECT id, title, content, created_at FROM posts WHERE id = $1', [articleId], (err, resultP) => {
@@ -190,7 +190,7 @@ module.exports = {
         const status = 'error';
         const { params: { articleId } } = req;
 
-        if (articleId === undefined || Number.isSafeInteger(articleId)) {
+        if (articleId === undefined || articleId === "undefined" || Number.isNaN(articleId)) {
             res.status(400).json({ status, error: "The article's unique-id is missing" });
         } else {
             db.query('DELETE FROM posts WHERE post_type_id = 2 AND id = $1 RETURNING title', [articleId], (err, result) => {
