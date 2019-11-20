@@ -55,7 +55,7 @@ module.exports = {
         const status = 'error';
         const { params: { gifId }, body: { comment }, userId } = req;
 
-        if (gifId === undefined || Number.isSafeInteger(gifId)) {
+        if (gifId === undefined || gifId === "undefined" || Number.isNaN(gifId)) {
             res.status(400).json({ status, error: "The gif post's unique-id is missing" });
         } else if (comment === undefined || comment.trim() === '') {
             res.status(400).json({ status, error: "The gif post's comment cannot be blank" });
@@ -102,7 +102,7 @@ module.exports = {
         const status = 'error';
         const { params: { gifId } } = req;
 
-        if (gifId === undefined || Number.isNaN(gifId)) {
+        if (gifId === undefined || gifId === "undefined" || Number.isNaN(gifId)) {
             res.status(400).json({ status, error: "The GIF post's unique-id is missing" });
         } else {
             await db.query('SELECT id, title, image_url, created_at FROM posts WHERE post_type_id = 1 AND id = $1', [gifId], (errP, resultP) => {
@@ -152,7 +152,7 @@ module.exports = {
         const status = 'error';
         const { params: { gifId } } = req;
 
-        if (gifId === undefined || Number.isSafeInteger(gifId)) {
+        if (gifId === undefined || gifId === "undefined" || Number.isNaN(gifId)) {
             res.status(400).json({ status, error: '' });
         } else {
             db.query('DELETE FROM posts WHERE post_type_id = 1 AND id = $1 RETURNING title', [gifId], (err, result) => {
