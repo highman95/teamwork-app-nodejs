@@ -3,19 +3,25 @@ require('dotenv').config();
 const fs = require('fs');
 const request = require('request');
 const jwt = require('jsonwebtoken');
-const baseUrl = "http://localhost:3500/api/v1";
 
 describe('GifController Test Suite', () => {
+    let server;
     let endPoint;
     let options = {};
     let gifId;
 
     beforeAll(() => {
-        endPoint = baseUrl + '/gifs';
+        server = require('../../src/index');
 
-        const token = jwt.sign({ userId: 11 }, process.env.JWT_SECRET);
+        const { address, port } = server.address();
+        const hostName = address === '::' ? `http://localhost:${port}` : '';
+        endPoint = `${hostName}/api/v1/gifs`;
+
+        const token = jwt.sign({ userId: 1 }, process.env.JWT_SECRET);
         options = { headers: { token } };
     });
+
+    // afterAll((done) => server.close(done));
 
     describe('POST /gifs', () => {
         let testFormData = {};
@@ -43,6 +49,7 @@ describe('GifController Test Suite', () => {
 
             it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
             it('should return error status', () => expect(responseBox.body.status).toBe('error'));
+            it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
         });
 
         describe('image is not specified/uploaded', () => {
@@ -59,6 +66,7 @@ describe('GifController Test Suite', () => {
 
             it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
             it('should return error status', () => expect(responseBox.body.status).toBe('error'));
+            it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
         });
 
         describe('non-GIF image is uploaded', () => {
@@ -75,6 +83,7 @@ describe('GifController Test Suite', () => {
 
             it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
             it('should return error status', () => expect(responseBox.body.status).toBe('error'));
+            it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
         });
 
         describe('a title and GIF image are specified', () => {
@@ -90,8 +99,10 @@ describe('GifController Test Suite', () => {
 
             it('should return statusCode 201', () => expect(responseBox.response.statusCode).toBe(201));
             it('should return success status', () => expect(responseBox.body.status).toBe('success'));
+            it('should return a success message', () => expect(responseBox.body.data.message).toBeDefined());
             it('should return the same title', () => expect(testFormData.title === responseBox.body.data.title).toBeTruthy());
             it('should return the gif\'s id', () => expect(responseBox.body.data.gifId).toBeDefined());
+            it('should return the gif post\'s imageUrl', () => expect(responseBox.body.data.imageUrl).toBeDefined());
             it('should return the time-created', () => expect(responseBox.body.data.createdOn).toBeDefined());
         });
     });
@@ -110,6 +121,7 @@ describe('GifController Test Suite', () => {
 
             it('should return statusCode 404', () => expect(responseBox.response.statusCode).toBe(404));
             it('should return error status', () => expect(responseBox.body.status).toBe('error'));
+            it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
         });
 
         describe('valid gifId is specified', () => {
@@ -154,6 +166,7 @@ describe('GifController Test Suite', () => {
 
             it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
             it('should return error status', () => expect(responseBox.body.status).toBe('error'));
+            it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
         });
 
         describe('GIF comment is specified', () => {
@@ -168,6 +181,7 @@ describe('GifController Test Suite', () => {
 
             it('should return statusCode 201', () => expect(responseBox.response.statusCode).toBe(201));
             it('should return success status', () => expect(responseBox.body.status).toBe('success'));
+            it('should return a success message', () => expect(responseBox.body.data.message).toBeDefined());
             it('should return the same comment', () => expect(testData.comment === responseBox.body.data.comment).toBeTruthy());
             it('should return the gif post\'s title', () => expect(responseBox.body.data.gifTitle).toBeDefined());
             it('should return the time-created', () => expect(responseBox.body.data.createdOn).toBeDefined());
@@ -188,7 +202,7 @@ describe('GifController Test Suite', () => {
 
             it('should return statusCode 200', () => expect(responseBox.response.statusCode).toBe(200));
             it('should return success status', () => expect(responseBox.body.status).toBe('success'));
-            it('should return a message', () => expect(responseBox.body.data.message).toBeDefined());
+            it('should return a success message', () => expect(responseBox.body.data.message).toBeDefined());
         });
     });
 });

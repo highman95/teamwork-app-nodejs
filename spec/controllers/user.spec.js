@@ -2,25 +2,33 @@ require('dotenv').config();
 
 const request = require('request');
 const jwt = require('jsonwebtoken');
-const baseUrl = "http://localhost:3500/api/v1";
 
 describe('UserController Test Suite', () => {
-    let endPoint;
+    let server;
+    let baseUrl;
     let testCredentialsX = {};
 
     beforeAll(() => {
+        server = require('../../src/index');
+
+        const { address, port } = server.address();
+        const hostName = address === '::' ? `http://localhost:${port}` : '';
+        baseUrl = `${hostName}/api/v1/auth`;
+
         testCredentialsX = {
             email: 'mark.spencer-' + Date.now() + '@oc.com',
             password: 'markspencer'
         };
     });
 
+    afterAll((done) => server.close(done));
+
     describe('POST /auth/create-user', () => {
         let testData = {};
         let options = {};
 
         beforeAll(() => {
-            endPoint = baseUrl + '/auth/create-user';
+            endPoint = baseUrl + '/create-user';
 
             const token = jwt.sign({ userId: 1 }, process.env.JWT_SECRET);
             options = { headers: { token } };
@@ -54,6 +62,7 @@ describe('UserController Test Suite', () => {
 
             it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
             it('should return error status', () => expect(responseBox.body.status).toBe('error'));
+            it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
         });
 
         describe('department is not specified', () => {
@@ -70,6 +79,7 @@ describe('UserController Test Suite', () => {
 
             it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
             it('should return error status', () => expect(responseBox.body.status).toBe('error'));
+            it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
         });
 
         describe('a non-existing role is specified', () => {
@@ -85,6 +95,7 @@ describe('UserController Test Suite', () => {
 
             it('should return statusCode 404', () => expect(responseBox.response.statusCode).toBe(404));
             it('should return error status', () => expect(responseBox.body.status).toBe('error'));
+            it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
         });
 
         describe('a non-existing department is specified', () => {
@@ -100,6 +111,7 @@ describe('UserController Test Suite', () => {
 
             it('should return statusCode 404', () => expect(responseBox.response.statusCode).toBe(404));
             it('should return error status', () => expect(responseBox.body.status).toBe('error'));
+            it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
         });
 
         describe('all required parameters are sent', () => {
@@ -114,7 +126,19 @@ describe('UserController Test Suite', () => {
 
             it('should return statusCode 201', () => expect(responseBox.response.statusCode).toBe(201));
             it('should return success status', () => expect(responseBox.body.status).toBe('success'));
-            it('should return the new user\'s unique-identifier', () => expect(responseBox.body.data.userId).toBeDefined());
+            it('should return success message', () => expect(responseBox.body.data.message).toBeDefined());
+            it('should return an authentication token', () => expect(responseBox.body.data.token).toBeDefined());
+            it('should return the new user\'s valid unique-identifier', () => {// verify token with expected value
+                let isValidNewUser;
+                try {
+                    const decodedToken = jwt.verify(responseBox.body.data.token, process.env.JWT_SECRET);
+                    isValidNewUser = (decodedToken.userId === responseBox.body.data.userId);
+                } catch (e) {
+                    isValidNewUser = false;
+                }
+
+                expect(isValidNewUser).toBeTruthy();
+            });
         });
     });
 
@@ -122,7 +146,7 @@ describe('UserController Test Suite', () => {
         let testCredentials = {}
 
         beforeAll(() => {
-            endPoint = baseUrl + '/auth/signin';
+            endPoint = baseUrl + '/signin';
         });
 
         beforeEach(() => {
@@ -143,6 +167,7 @@ describe('UserController Test Suite', () => {
 
             it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
             it('should return error status', () => expect(responseBox.body.status).toBe('error'));
+            it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
         });
 
         describe('an invalid email is supplied', () => {
@@ -159,6 +184,7 @@ describe('UserController Test Suite', () => {
 
             it('should return statusCode 404', () => expect(responseBox.response.statusCode).toBe(404));
             it('should return error status', () => expect(responseBox.body.status).toBe('error'));
+            it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
         });
 
         describe('blank(invalid) password is supplied', () => {
@@ -175,6 +201,7 @@ describe('UserController Test Suite', () => {
 
             it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
             it('should return error status', () => expect(responseBox.body.status).toBe('error'));
+            it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
         });
 
         describe('valid credentials are supplied', () => {
