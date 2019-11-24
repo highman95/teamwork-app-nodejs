@@ -72,6 +72,7 @@ module.exports = {
 
     signIn: async (req, res) => {
         const { email, password } = req.body;
+        console.log('Request-Body (Signin):\n', util.inspect(req.body));
 
         if (email === undefined || email.trim() === '') {
             res.status(400).json({ status: 'error', error: 'E-mail address cannot be blank' });
