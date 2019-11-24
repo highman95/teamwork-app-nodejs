@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require('../configs/db');
+const util = require('util');
 
 const generateToken = (payload) => jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h', subject: 'TeamWork-nodeJS' });
 
@@ -9,7 +10,7 @@ module.exports = {
         const {
             firstName, lastName, email, password, gender, address, jobRole, department,
         } = req.body;
-        console.log('Request-Body:\n', JSON.stringify(req.body));
+        console.log('Request-Body:\n', util.inspect(req.body));
 
         if (firstName === null || firstName === undefined || firstName.trim() === '') {
             res.status(400).json({ status: 'error', error: 'Missing required parameter: firstName' });
