@@ -10,7 +10,6 @@ module.exports = {
         const {
             firstName, lastName, email, password, gender, address, jobRole, department,
         } = req.body;
-        console.log('Request-Body:\n', util.inspect(req.body));
 
         if (firstName === null || firstName === undefined || firstName.trim() === '') {
             res.status(400).json({ status: 'error', error: 'Missing required parameter: firstName' });
@@ -72,7 +71,6 @@ module.exports = {
 
     signIn: async (req, res) => {
         const { email, password } = req.body;
-        console.log('Request-Body (Signin):\n', util.inspect(req.body));
 
         if (email === undefined || email.trim() === '') {
             res.status(400).json({ status: 'error', error: 'E-mail address cannot be blank' });
