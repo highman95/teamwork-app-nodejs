@@ -143,7 +143,7 @@ module.exports = {
         if (articleId === undefined || articleId === "undefined" || Number.isNaN(articleId)) {
             res.status(400).json({ status, error: "The article's unique-id is missing" });
         } else {
-            await db.query('SELECT id, title, content, created_at FROM posts WHERE id = $1', [articleId], (err, resultP) => {
+            await db.query('SELECT p.id, title, content, created_at, name FROM posts p JOIN post_types pt ON pt.id = p.post_type_id WHERE post_type_id = 2 AND p.id = $1', [articleId], (err, resultP) => {
                 try {
                     if (err) {
                         throw err;
@@ -164,13 +164,13 @@ module.exports = {
                                 }
 
                                 const {
-                                    id, title, content: article, created_at: createdOn,
+                                    id, title, content: article, created_at: createdOn, name: type
                                 } = resultP.rows[0];
 
                                 res.status(200).json({
                                     status: 'success',
                                     data: {
-                                        id, createdOn, title, article, comments,
+                                        id, createdOn, title, article, comments, type,
                                     },
                                 });
                             } catch (e) {

@@ -105,7 +105,7 @@ module.exports = {
         if (gifId === undefined || gifId === "undefined" || Number.isNaN(gifId)) {
             res.status(400).json({ status, error: "The GIF post's unique-id is missing" });
         } else {
-            await db.query('SELECT id, title, image_url, created_at FROM posts WHERE post_type_id = 1 AND id = $1', [gifId], (errP, resultP) => {
+            await db.query('SELECT p.id, title, image_url, created_at, name FROM posts p JOIN post_types pt ON pt.id = p.post_type_id WHERE post_type_id = 1 AND p.id = $1', [gifId], (errP, resultP) => {
                 try {
                     if (errP) {
                         throw errP;
@@ -126,13 +126,13 @@ module.exports = {
                                 }
 
                                 const {
-                                    id, title, image_url: url, created_at: createdOn,
+                                    id, title, image_url: url, created_at: createdOn, name: type
                                 } = resultP.rows[0];
 
                                 res.status(200).json({
                                     status: 'success',
                                     data: {
-                                        id, createdOn, title, url, comments,
+                                        id, createdOn, title, url, comments, type,
                                     },
                                 });
                             } catch (e) {

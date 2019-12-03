@@ -2,7 +2,7 @@ const db = require('../configs/db');
 
 module.exports = {
     getPosts: async (req, res) => {
-        db.query('SELECT id, title, content, image_url, post_type_id, user_id, created_at FROM posts ORDER BY created_at DESC', [], (err, result) => {
+        db.query('SELECT p.id, title, content, image_url, user_id, post_type_id, created_at, name FROM posts p JOIN post_types pt ON pt.id = p.post_type_id ORDER BY created_at DESC', [], (err, result) => {
             try {
                 if (err) {
                     throw err;
@@ -11,7 +11,7 @@ module.exports = {
                 const feeds = result.rows.map((row) => {
                     const {
                         id, title, content: article, image_url: url, post_type_id: postTypeId,
-                        user_id: authorId, created_at: createdOn,
+                        user_id: authorId, created_at: createdOn, name: type,
                     } = row;
 
                     return {
@@ -19,7 +19,7 @@ module.exports = {
                         createdOn,
                         title,
                         ...(postTypeId === 1 ? { url } : { article }),
-                        authorId,
+                        authorId, type,
                     };
                 });
 
