@@ -1,6 +1,7 @@
 const fs = require('fs');
 const mediaManager = require('../configs/cloudinary');
 const db = require('../configs/db');
+const post_type_id = 1;
 
 module.exports = {
     createPost: async (req, res) => {
@@ -17,7 +18,7 @@ module.exports = {
                     // delete the file and save the cloudStorage info
                     fs.unlink(file.path, (err2) => {
                         if (!err2) {
-                            db.query('INSERT INTO posts (title, image_url, post_type_id, user_id) VALUES ($1, $2, $3, $4) RETURNING id, created_at', [title, response.url, 1, userId], (err, result) => {
+                            db.query('INSERT INTO posts (title, image_url, post_type_id, user_id) VALUES ($1, $2, $3, $4) RETURNING id, created_at', [title, response.url, post_type_id, userId], (err, result) => {
                                 if (err) {
                                     console.log('DB Error:', err.message || err.error.message);
                                     res.status(500).json({ status, error: 'The GIF post could not be saved' });
@@ -60,7 +61,7 @@ module.exports = {
         } else if (comment === undefined || comment.trim() === '') {
             res.status(400).json({ status, error: "The gif post's comment cannot be blank" });
         } else {
-            db.query('SELECT title FROM posts WHERE post_type_id = 1 AND id = $1', [gifId], (errP, resultP) => {
+            db.query(`SELECT title FROM posts WHERE post_type_id = ${post_type_id} AND id = $1`, [gifId], (errP, resultP) => {
                 try {
                     if (errP) {
                         throw errP;
@@ -105,7 +106,7 @@ module.exports = {
         if (gifId === undefined || gifId === "undefined" || Number.isNaN(gifId)) {
             res.status(400).json({ status, error: "The GIF post's unique-id is missing" });
         } else {
-            await db.query('SELECT p.id, title, image_url, created_at, name FROM posts p JOIN post_types pt ON pt.id = p.post_type_id WHERE post_type_id = 1 AND p.id = $1', [gifId], (errP, resultP) => {
+            await db.query(`SELECT p.id, title, image_url, created_at, name FROM posts p JOIN post_types pt ON pt.id = p.post_type_id WHERE post_type_id = ${post_type_id} AND p.id = $1`, [gifId], (errP, resultP) => {
                 try {
                     if (errP) {
                         throw errP;
@@ -155,7 +156,7 @@ module.exports = {
         if (gifId === undefined || gifId === "undefined" || Number.isNaN(gifId)) {
             res.status(400).json({ status, error: '' });
         } else {
-            db.query('DELETE FROM posts WHERE post_type_id = 1 AND id = $1 RETURNING title', [gifId], (err, result) => {
+            db.query(`DELETE FROM posts WHERE post_type_id = ${post_type_id} AND id = $1 RETURNING title`, [gifId], (err, result) => {
                 try {
                     if (err) {
                         throw err;
