@@ -41,8 +41,8 @@ describe('GifController Test Suite', () => {
             beforeAll((done) => {
                 testFormData.title = '';
 
-                request.post({ url: endPoint, ...options, formData: testFormData }, (error, response, body) => {
-                    responseBox = { response, body: JSON.parse(body) };
+                request.post({ url: endPoint, ...options, formData: testFormData, json: true }, (error, response, body) => {
+                    responseBox = { error, response, body };
                     done();
                 });
             });
@@ -58,8 +58,8 @@ describe('GifController Test Suite', () => {
             beforeAll((done) => {
                 testFormData.image = '';
 
-                request.post({ url: endPoint, ...options, formData: testFormData }, (error, response, body) => {
-                    responseBox = { response, body: JSON.parse(body) };
+                request.post({ url: endPoint, ...options, formData: testFormData, json: true }, (error, response, body) => {
+                    responseBox = { error, response, body };
                     done();
                 });
             });
@@ -75,8 +75,8 @@ describe('GifController Test Suite', () => {
             beforeAll((done) => {
                 testFormData.image = fs.createReadStream('public/images/sample.jpg');
 
-                request.post({ url: endPoint, ...options, formData: testFormData }, (error, response, body) => {
-                    responseBox = { response, body: JSON.parse(body) };
+                request.post({ url: endPoint, ...options, formData: testFormData, json: true }, (error, response, body) => {
+                    responseBox = { error, response, body };
                     done();
                 });
             });
@@ -90,8 +90,8 @@ describe('GifController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.post({ url: endPoint, ...options, formData: testFormData }, (error, response, body) => {
-                    responseBox = { response, body: JSON.parse(body) };
+                request.post({ url: endPoint, ...options, formData: testFormData, json: true }, (error, response, body) => {
+                    responseBox = { error, response, body };
                     gifId = responseBox.body.data.gifId;
                     done();
                 });
@@ -113,8 +113,8 @@ describe('GifController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.get({ url: `${endPoint}/0`, ...options }, (error, response, body) => {
-                    responseBox = { response, body: JSON.parse(body) };
+                request.get({ url: `${endPoint}/0`, ...options, json: true }, (error, response, body) => {
+                    responseBox = { error, response, body };
                     done();
                 });
             });
@@ -128,8 +128,8 @@ describe('GifController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.get({ url: `${endPoint}/${gifId}`, ...options }, (error, response, body) => {
-                    responseBox = { response, body: JSON.parse(body) };
+                request.get({ url: `${endPoint}/${gifId}`, ...options, json: true }, (error, response, body) => {
+                    responseBox = { error, response, body };
                     done();
                 });
             });
@@ -158,8 +158,8 @@ describe('GifController Test Suite', () => {
             beforeAll((done) => {
                 testData.comment = '';
 
-                request.post({ url: `${endPoint}/${gifId}/comment`, ...options, form: testData }, (error, response, body) => {
-                    responseBox = { response, body: JSON.parse(body) };
+                request.post({ url: `${endPoint}/${gifId}/comment`, ...options, form: testData, json: true }, (error, response, body) => {
+                    responseBox = { error, response, body };
                     done();
                 });
             });
@@ -173,8 +173,8 @@ describe('GifController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.post({ url: `${endPoint}/${gifId}/comment`, ...options, form: testData }, (error, response, body) => {
-                    responseBox = { response, body: JSON.parse(body) };
+                request.post({ url: `${endPoint}/${gifId}/comment`, ...options, form: testData, json: true }, (error, response, body) => {
+                    responseBox = { error, response, body };
                     done();
                 });
             });
@@ -194,8 +194,8 @@ describe('GifController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.delete({ url: `${endPoint}/${gifId}`, ...options }, (error, response, body) => {
-                    responseBox = { response, body: JSON.parse(body) };
+                request.delete({ url: `${endPoint}/${gifId}`, ...options, json: true }, (error, response, body) => {
+                    responseBox = { error, response, body };
                     done();
                 });
             });

@@ -40,8 +40,8 @@ describe('ArticleController Test Suite', () => {
             beforeAll((done) => {
                 testData.title = '';
 
-                request.post({ url: endPoint, ...options, form: testData }, (error, response, body) => {
-                    responseBox = { response, body: JSON.parse(body) };
+                request.post({ url: endPoint, ...options, form: testData, json: true }, (error, response, body) => {
+                    responseBox = { response, body };
                     done();
                 });
             });
@@ -57,8 +57,8 @@ describe('ArticleController Test Suite', () => {
             beforeAll((done) => {
                 testData.article = '';
 
-                request.post({ url: endPoint, ...options, form: testData }, (error, response, body) => {
-                    responseBox = { response, body: JSON.parse(body) };
+                request.post({ url: endPoint, ...options, form: testData, json: true }, (error, response, body) => {
+                    responseBox = { response, body };
                     done();
                 });
             });
@@ -72,8 +72,8 @@ describe('ArticleController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.post({ url: endPoint, ...options, form: testData }, (error, response, body) => {
-                    responseBox = { response, body: JSON.parse(body) };
+                request.post({ url: endPoint, ...options, form: testData, json: true }, (error, response, body) => {
+                    responseBox = { response, body };
                     articleId = responseBox.body.data.articleId;//set the test article-id
                     done();
                 });
@@ -94,8 +94,8 @@ describe('ArticleController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.get({ url: `${endPoint}/0`, ...options }, (error, response, body) => {
-                    responseBox = { response, body: JSON.parse(body) };
+                request.get({ url: `${endPoint}/0`, ...options, json: true }, (error, response, body) => {
+                    responseBox = { response, body };
                     done();
                 });
             });
@@ -109,8 +109,8 @@ describe('ArticleController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.get({ url: `${endPoint}/${articleId}`, ...options }, (error, response, body) => {
-                    responseBox = { response, body: JSON.parse(body) };
+                request.get({ url: `${endPoint}/${articleId}`, ...options, json: true }, (error, response, body) => {
+                    responseBox = { response, body };
                     done();
                 });
             });
@@ -138,8 +138,8 @@ describe('ArticleController Test Suite', () => {
             beforeAll((done) => {
                 testData.comment = '';
 
-                request.post({ url: `${endPoint}/${articleId}/comment`, ...options, form: testData }, (error, response, body) => {
-                    responseBox = { response, body: JSON.parse(body) };
+                request.post({ url: `${endPoint}/${articleId}/comment`, ...options, form: testData, json: true }, (error, response, body) => {
+                    responseBox = { response, body };
                     done();
                 });
             });
@@ -153,8 +153,8 @@ describe('ArticleController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.post({ url: `${endPoint}/${articleId}/comment`, ...options, form: testData }, (error, response, body) => {
-                    responseBox = { response, body: JSON.parse(body) };
+                request.post({ url: `${endPoint}/${articleId}/comment`, ...options, form: testData, json: true }, (error, response, body) => {
+                    responseBox = { response, body };
                     done();
                 });
             });
@@ -174,8 +174,8 @@ describe('ArticleController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.delete({ url: `${endPoint}/${articleId}`, ...options }, (error, response, body) => {
-                    responseBox = { response, body: JSON.parse(body) };
+                request.delete({ url: `${endPoint}/${articleId}`, ...options, json: true }, (error, response, body) => {
+                    responseBox = { response, body };
                     done();
                 });
             });

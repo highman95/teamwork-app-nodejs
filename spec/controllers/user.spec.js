@@ -54,8 +54,8 @@ describe('UserController Test Suite', () => {
             beforeAll((done) => {
                 testData.jobRole = '';
 
-                request.post({ url: endPoint, ...options, form: testData }, (error, response, body) => {
-                    responseBox = { error, response, body: JSON.parse(body) };
+                request.post({ url: endPoint, ...options, form: testData, json: true }, (error, response, body) => {
+                    responseBox = { error, response, body };
                     done();
                 });
             });
@@ -71,8 +71,8 @@ describe('UserController Test Suite', () => {
             beforeAll((done) => {
                 testData.department = '';
 
-                request.post({ url: endPoint, ...options, form: testData }, (error, response, body) => {
-                    responseBox = { error, response, body: JSON.parse(body) };
+                request.post({ url: endPoint, ...options, form: testData, json: true }, (error, response, body) => {
+                    responseBox = { error, response, body };
                     done();
                 });
             });
@@ -87,8 +87,8 @@ describe('UserController Test Suite', () => {
 
             beforeAll((done) => {
                 testData.jobRole = 'xyz';
-                request.post({ url: endPoint, ...options, form: testData }, (error, response, body) => {
-                    responseBox = { response, body: JSON.parse(body) };
+                request.post({ url: endPoint, ...options, form: testData, json: true }, (error, response, body) => {
+                    responseBox = { error, response, body };
                     done();
                 });
             });
@@ -103,8 +103,8 @@ describe('UserController Test Suite', () => {
 
             beforeAll((done) => {
                 testData.department = 'xyz';
-                request.post({ url: endPoint, ...options, form: testData }, (error, response, body) => {
-                    responseBox = { error, response, body: JSON.parse(body) };
+                request.post({ url: endPoint, ...options, form: testData, json: true }, (error, response, body) => {
+                    responseBox = { error, response, body };
                     done();
                 });
             });
@@ -118,8 +118,8 @@ describe('UserController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.post({ url: endPoint, ...options, form: testData }, (error, response, body) => {
-                    responseBox = { error, response, body: JSON.parse(body) };
+                request.post({ url: endPoint, ...options, form: testData, json: true }, (error, response, body) => {
+                    responseBox = { error, response, body };
                     done();
                 });
             });
@@ -159,8 +159,8 @@ describe('UserController Test Suite', () => {
             beforeAll((done) => {
                 testCredentials.email = '';
 
-                request.post(endPoint, { form: testCredentials }, (error, response, body) => {
-                    responseBox = { error, response, body: JSON.parse(body) };
+                request.post(endPoint, { form: testCredentials, json: true }, (error, response, body) => {
+                    responseBox = { error, response, body };
                     done();
                 });
             });
@@ -176,8 +176,8 @@ describe('UserController Test Suite', () => {
             beforeAll((done) => {
                 testCredentials.email = 'i-do-code@me.com';
 
-                request.post(endPoint, { form: testCredentials }, (error, response, body) => {
-                    responseBox = { error, response, body: JSON.parse(body) };
+                request.post(endPoint, { form: testCredentials, json: true }, (error, response, body) => {
+                    responseBox = { error, response, body };
                     done();
                 });
             });
@@ -193,8 +193,8 @@ describe('UserController Test Suite', () => {
             beforeAll((done) => {
                 testCredentials.password = '';
 
-                request.post(endPoint, { form: testCredentials }, (error, response, body) => {
-                    responseBox = { error, response, body: JSON.parse(body) };
+                request.post(endPoint, { form: testCredentials, json: true }, (error, response, body) => {
+                    responseBox = { error, response, body };
                     done();
                 });
             });
@@ -208,8 +208,8 @@ describe('UserController Test Suite', () => {
             let responseBox;
 
             beforeAll((done) => {
-                request.post(endPoint, { form: testCredentials }, (error, response, body) => {
-                    responseBox = { error, response, body: JSON.parse(body) };
+                request.post(endPoint, { form: testCredentials, json: true }, (error, response, body) => {
+                    responseBox = { error, response, body };
                     done();
                 });
             });
