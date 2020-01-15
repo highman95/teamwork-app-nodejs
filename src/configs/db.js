@@ -5,7 +5,7 @@ const db = new Pool({
     ssl: process.env.DB_SSL === 'true',
 });
 
-db.on('connect', () => console.log('Connected to database...'));
+// db.on('connect', () => console.log('Connected to database...'));
 db.on('error', (e) => console.error(`Cannot connect to database...${e.message}`));
 
 module.exports = db;
