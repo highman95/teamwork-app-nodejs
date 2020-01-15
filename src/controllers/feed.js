@@ -6,13 +6,13 @@ module.exports = {
 
         try {
             const resultCount = await db.query(`SELECT COUNT(p.id) as total_count FROM posts p JOIN post_types pt ON pt.id = p.post_type_id`);
-            const totalCount = parseInt(resultCount.rows[0].total_count);
+            const totalCount = resultCount.rows ? parseInt(resultCount.rows[0].total_count) : 0;
 
             const currentPage = parseInt(page);
             const offset = ((currentPage < 1 ? 1 : currentPage) - 1) * limit;
             const result = await db.query(`SELECT p.id, title, content, image_url, user_id, post_type_id, created_at, name FROM posts p JOIN post_types pt ON pt.id = p.post_type_id ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`);
 
-            const feeds = result.rows.map((row) => {
+            const feeds = result.rows ? result.rows.map((row) => {
                 const {
                     id, title, content: article, image_url: url, post_type_id: postTypeId,
                     user_id: authorId, created_at: createdOn, name: type,
@@ -26,7 +26,7 @@ module.exports = {
                     authorId,
                     type,
                 };
-            });
+            }) : [];
 
             const pages = limit < 1 ? 1 : Math.ceil(totalCount / limit)
             const meta = { currentPage, pages, totalCount }
