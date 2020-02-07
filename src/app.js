@@ -1,6 +1,5 @@
 const path = require('path');
 const express = require('express');
-const bodyParser = require('body-parser');
 const routes = require('./routes');
 
 const app = express();
@@ -17,8 +16,8 @@ app.use((req, res, next) => {
 
 
 // parse request data to JSON object
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/api/v1', routes(router), (err, req, res, next) => {
