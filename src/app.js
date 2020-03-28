@@ -1,6 +1,8 @@
 const path = require('path');
 const express = require('express');
+// const hbs = require('hbs');
 const routes = require('./routes');
+const db = require('./configs/db');
 
 const app = express();
 const router = express.Router();
@@ -19,13 +21,21 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+// register the DB-connection as global variable
+global.db = db;
+
+// set up handlebars engine and view location
+app.set('view engine', 'hbs')//.set('views', path.join(__dirname, '../templates/views'));
+// hbs.registerPartials(path.join(__dirname, '../templates/partials'))
+
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/api/v1', routes(router), (err, req, res, next) => {
-    const isCSE = (err.name === 'TokenExpiredError') || (err.name === 'TypeError') || (err.name === 'Error');
-    res.status(isCSE ? 400 : 500).send({ status: 'error', error: err.message || err.error.message });
-});
+    // console.log(`${err.name || err.error.name} --- ${err.message || err.error.message}`);
 
-// set a default route
-app.use('*', (req, res) => res.status(404).json({ status: 'error', error: 'Page no longer exists' }));
+    const isBR = (err.name === 'ReferenceError');
+    const isCSE = ['TokenExpiredError', 'EvalError', 'Error'].includes(err.name);
+    res.status(err.statusCode || (isBR ? 404 : (isCSE ? 400 : 500))).send({ status: 'error', error: err.message || err.error.message });
+});
 
 module.exports = app;
