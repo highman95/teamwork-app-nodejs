@@ -9,9 +9,7 @@ const storage = multer.diskStorage({
 
 const fileFilter = (req, file, cb) => {
     const isGif = (file.mimetype === 'image/gif');
-    cb(isGif ? null : new TypeError('Only GIF images are acceptable'), isGif);
+    cb(isGif ? null : new Error('Only GIF images are acceptable'), isGif);
 };
 
-const multerConfig = multer({ storage, fileFilter, limits: { fileSize: 1000000 } }).single('image');
-
-module.exports = multerConfig;
+module.exports = multer({ storage, fileFilter, limits: { fileSize: 1000000 } }).single('image');
