@@ -68,7 +68,6 @@ module.exports = {
             const { id, title, content: article, created_at: createdOn, name: type } = post;
             res.status(200).json({ status: 'success', data: { id, createdOn, title, article, comments, type } });
         } catch (e) {
-            e.message = 'Post could not be retrieved';
             next(e)
         }
     },

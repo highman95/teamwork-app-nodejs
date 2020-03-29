@@ -28,8 +28,6 @@ module.exports = {
             const meta = { page, pages, totalCount }
             res.status(200).json({ status: 'success', data: feeds, meta });
         } catch (e) {
-            // console.error('[Feed] DB-Error', e.message || e.error.message);
-            e.message = e.message || 'The posts could not be retrieved';
             next(e)
         }
     },

@@ -55,7 +55,6 @@ module.exports = {
             const { id, title, image_url: url, created_at: createdOn, name: type } = post;
             res.status(200).json({ status: 'success', data: { id, createdOn, title, url, comments, type } });
         } catch (e) {
-            e.message = 'Post could not be retrieved';
             next(e)
         }
     },
