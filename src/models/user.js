@@ -6,7 +6,7 @@ const isValidEmail = (email) => (email && /^([a-zA-Z0-9_\-]+)(\.)?([a-zA-Z0-9_\-
 
 module.exports = {
     async create(firstName, lastName, email, password, gender, address, roleName, departmentName) {
-        if (await this.findByEmail(email)) throw new Error('E-mail address already exists');// 409
+        if ((await this.findByEmail(email)).id) throw new Error('E-mail address already exists');// 409
 
         const params = ['firstName', 'lastName', 'password', 'gender'];
         Object.entries({
@@ -19,10 +19,10 @@ module.exports = {
         });
 
         const role = await modelRole.findByName(roleName);
-        if (!role) throw new ReferenceError('Role does not exist');// 404
+        if (!role.id) throw new ReferenceError('Role does not exist');// 404
 
         const department = await modelDepartment.findByName(departmentName);
-        if (!department) throw new ReferenceError('Department does not exist');// 404
+        if (!department.id) throw new ReferenceError('Department does not exist');// 404
 
         try {
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -53,6 +53,6 @@ module.exports = {
         if (!isValidEmail(email)) throw new Error('E-mail address is invalid');
 
         const result = await db.query('SELECT id, first_name, last_name, email, password FROM users WHERE email = $1', [email]);
-        return result.rows[0] || null;
+        return result.rows[0] || {};
     },
 };
