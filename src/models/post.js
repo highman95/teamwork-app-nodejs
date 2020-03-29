@@ -66,7 +66,11 @@ module.exports = {
         if (!postTypeId) throw new Error("Post-type identifier is missing");//400
         if (!id || Number.isNaN(id)) throw new ReferenceError("Post does not exist");//404
 
-        const result = await db.query(`SELECT id, title, content, image_url, created_at FROM posts WHERE post_type_id = $1 AND id = $2`, [postTypeId, id]);
-        return result.rows[0] || {};
+        try {
+            const result = await db.query(`SELECT id, title, content, image_url, created_at FROM posts WHERE post_type_id = $1 AND id = $2`, [postTypeId, id]);
+            return result.rows[0] || {};
+        } catch (e) {
+            throw new Error('Post could not be retrieved')
+        }
     }
 }
