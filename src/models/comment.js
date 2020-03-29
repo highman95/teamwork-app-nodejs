@@ -18,7 +18,11 @@ module.exports = {
     fetchAll: async (postId) => {
         if (!postId || Number.isNaN(postId)) throw new ReferenceError("Post does not exist");//404
 
-        const results = await db.query(`SELECT id, comment, user_id FROM comments WHERE post_id = $1`, [postId]);
-        return results.rows;
+        try {
+            const results = await db.query(`SELECT id, comment, user_id FROM comments WHERE post_id = $1`, [postId]);
+            return results.rows;
+        } catch (e) {
+            throw new Error('Comment(s) could not be retrieved')
+        }
     }
 }

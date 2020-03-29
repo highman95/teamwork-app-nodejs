@@ -46,8 +46,12 @@ module.exports = {
         const currentPage = parseInt(page);
         const offset = ((currentPage < 1 ? 1 : currentPage) - 1) * limit;
 
-        const result = await db.query(`SELECT p.id, title, content, image_url, user_id, post_type_id, created_at, name FROM posts p JOIN post_types pt ON pt.id = p.post_type_id WHERE 1 = 1 ${where} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`, filter);
-        return result.rows;
+        try {
+            const result = await db.query(`SELECT p.id, title, content, image_url, user_id, post_type_id, created_at, name FROM posts p JOIN post_types pt ON pt.id = p.post_type_id WHERE 1 = 1 ${where} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`, filter);
+            return result.rows;
+        } catch (e) {
+            throw new Error('Post(s) could not be retrieved')
+        }
     },
 
     fetchCount: async (postTypeId) => {
