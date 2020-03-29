@@ -47,7 +47,7 @@ module.exports = {
         const offset = ((currentPage < 1 ? 1 : currentPage) - 1) * limit;
 
         try {
-            const result = await db.query(`SELECT p.id, title, content, image_url, user_id, post_type_id, created_at, name FROM posts p JOIN post_types pt ON pt.id = p.post_type_id WHERE 1 = 1 ${where} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`, filter);
+            const result = await db.query(`SELECT id, title, content, image_url, user_id, post_type_id, created_at FROM posts WHERE 1 = 1 ${where} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`, filter);
             return result.rows;
         } catch (e) {
             throw new Error('Post(s) could not be retrieved')
@@ -58,7 +58,7 @@ module.exports = {
         const where = postTypeId ? 'AND post_type_id = $1' : '';
         const filter = postTypeId ? [postTypeId] : [];
 
-        const result = await db.query(`SELECT COUNT(p.id) as total_count FROM posts p JOIN post_types pt ON pt.id = p.post_type_id WHERE 1 = 1 ${where}`, filter);
+        const result = await db.query(`SELECT COUNT(id) as total_count FROM posts WHERE 1 = 1 ${where}`, filter);
         return result.rows ? parseInt(result.rows[0].total_count) : 0;
     },
 
@@ -66,7 +66,7 @@ module.exports = {
         if (!postTypeId) throw new Error("Post-type identifier is missing");//400
         if (!id || Number.isNaN(id)) throw new ReferenceError("Post does not exist");//404
 
-        const result = await db.query(`SELECT p.id, title, content, image_url, created_at, name FROM posts p JOIN post_types pt ON pt.id = p.post_type_id WHERE post_type_id = $1 AND p.id = $2`, [postTypeId, id]);
+        const result = await db.query(`SELECT id, title, content, image_url, created_at FROM posts WHERE post_type_id = $1 AND id = $2`, [postTypeId, id]);
         return result.rows[0] || {};
     }
 }
