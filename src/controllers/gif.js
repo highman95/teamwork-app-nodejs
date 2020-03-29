@@ -9,9 +9,14 @@ module.exports = {
             const post = await modelPost.create(title, file, userId);
             const { id: gifId, image_url: imageUrl, created_at: createdOn } = post;
 
-            res.status(201).json({ status: 'success', data: { message: 'GIF image successfully posted', imageUrl, gifId, title, createdOn } });
+            res.status(201).json({
+                status: 'success',
+                data: {
+                    message: 'GIF image successfully posted', imageUrl, gifId, title, createdOn,
+                },
+            });
         } catch (e) {
-            next(e)
+            next(e);
         }
     },
 
@@ -34,9 +39,14 @@ module.exports = {
             const { title: gifTitle } = post;
             const { created_at: createdOn } = postComment;
 
-            res.status(201).json({ status: 'success', data: { message: 'Comment successfully created', createdOn, gifTitle, comment } });
+            res.status(201).json({
+                status: 'success',
+                data: {
+                    message: 'Comment successfully created', createdOn, gifTitle, comment,
+                },
+            });
         } catch (e) {
-            next(e)
+            next(e);
         }
     },
 
@@ -47,14 +57,19 @@ module.exports = {
             const post = await modelPost.find(gifId);
             let comments = await modelComment.fetchAll(post.id);
 
-            comments = comments.map(({ id: commentId, comment, user_id: authorId }) => {
-                return { commentId, comment, authorId };
-            });
+            comments = comments.map(({ id: commentId, comment, user_id: authorId }) => ({ commentId, comment, authorId }));
+            const {
+                id, title, image_url: url, created_at: createdOn,
+            } = post;
 
-            const { id, title, image_url: url, created_at: createdOn } = post;
-            res.status(200).json({ status: 'success', data: { id, createdOn, title, url, comments } });
+            res.status(200).json({
+                status: 'success',
+                data: {
+                    id, createdOn, title, url, comments,
+                },
+            });
         } catch (e) {
-            next(e)
+            next(e);
         }
     },
 
@@ -65,7 +80,7 @@ module.exports = {
             await modelPost.delete(gifId);
             res.status(200).json({ status: 'success', data: { message: 'GIF post successfully deleted' } });
         } catch (e) {
-            next(e)
+            next(e);
         }
     },
 };

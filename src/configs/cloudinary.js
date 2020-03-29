@@ -10,6 +10,6 @@ cloudinary.config({
 module.exports = {
     uploadImage: async (file, callBack) => {
         const options = { resource_type: 'image', folder: 'capstone-project/images/' };
-        return await cloudinary.uploader.upload(file, options, callBack);
+        return cloudinary.uploader.upload(file, options, callBack);
     },
 };

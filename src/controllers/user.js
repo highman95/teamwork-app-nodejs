@@ -1,5 +1,5 @@
-const model = require('../models/user');
 const jwt = require('jsonwebtoken');
+const model = require('../models/user');
 
 const generateToken = (payload) => jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h', subject: 'TeamWork-nodeJS' });
 
@@ -15,8 +15,7 @@ module.exports = {
 
             res.status(201).json({ status: 'success', data: { message: 'User account successfully created', token, userId: user.id } });
         } catch (e) {
-            // console.error('Error:', e.message || e.error.message);
-            next(e)
+            next(e);
         }
     },
 
@@ -25,13 +24,11 @@ module.exports = {
 
         try {
             const user = await model.verify(email, password);
-            const { id: userId, first_name: firstName } = user;
-            const token = generateToken({ userId });
+            const token = generateToken({ userId: user.id });
 
-            res.status(200).json({ status: 'success', data: { token, userId, firstName } });
+            res.status(200).json({ status: 'success', data: { token, userId: user.id, firstName: user.first_name } });
         } catch (e) {
-            e.message = e.message || 'E-mail address verification failed';
-            next(e)
+            next(e);
         }
     },
 };

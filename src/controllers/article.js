@@ -9,9 +9,14 @@ module.exports = {
             const post = await modelPost.create(title, article, userId);
             const { id: articleId, created_at: createdOn } = post;
 
-            res.status(201).json({ status: 'success', data: { message: 'Article successfully posted', articleId, title, createdOn } });
+            res.status(201).json({
+                status: 'success',
+                data: {
+                    message: 'Article successfully posted', articleId, title, createdOn,
+                },
+            });
         } catch (e) {
-            next(e)
+            next(e);
         }
     },
 
@@ -34,9 +39,14 @@ module.exports = {
             const { title: articleTitle, content: article } = post;
             const { created_at: createdOn } = postComment;
 
-            res.status(201).json({ status: 'success', data: { message: 'Comment successfully created', createdOn, articleTitle, article, comment } });
+            res.status(201).json({
+                status: 'success',
+                data: {
+                    message: 'Comment successfully created', createdOn, articleTitle, article, comment,
+                },
+            });
         } catch (e) {
-            next(e)
+            next(e);
         }
     },
 
@@ -49,7 +59,7 @@ module.exports = {
 
             res.status(200).json({ status: 'success', data: { message: 'Article successfully updated', title, article } });
         } catch (e) {
-            next(e)
+            next(e);
         }
     },
 
@@ -60,14 +70,19 @@ module.exports = {
             const post = await modelPost.find(articleId);
             let comments = await modelComment.fetchAll(post.id);
 
-            comments = comments.map(({ id: commentId, comment, user_id: authorId }) => {
-                return { commentId, comment, authorId };
-            });
+            comments = comments.map(({ id: commentId, comment, user_id: authorId }) => ({ commentId, comment, authorId }));
+            const {
+                id, title, content: article, created_at: createdOn,
+            } = post;
 
-            const { id, title, content: article, created_at: createdOn } = post;
-            res.status(200).json({ status: 'success', data: { id, createdOn, title, article, comments } });
+            res.status(200).json({
+                status: 'success',
+                data: {
+                    id, createdOn, title, article, comments,
+                },
+            });
         } catch (e) {
-            next(e)
+            next(e);
         }
     },
 
@@ -78,7 +93,7 @@ module.exports = {
             await modelPost.delete(articleId);
             res.status(200).json({ status: 'success', data: { message: 'Article successfully deleted' } });
         } catch (e) {
-            next(e)
+            next(e);
         }
     },
 };

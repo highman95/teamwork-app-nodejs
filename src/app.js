@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 global.db = db;
 
 // set up handlebars engine and view location
-app.set('view engine', 'hbs')//.set('views', path.join(__dirname, '../templates/views'));
+app.set('view engine', 'hbs');// .set('views', path.join(__dirname, '../templates/views'));
 // hbs.registerPartials(path.join(__dirname, '../templates/partials'))
 
 app.use(express.static(path.join(__dirname, '../public')));

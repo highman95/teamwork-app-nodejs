@@ -5,9 +5,9 @@ module.exports = {
     },
 
     findByName: async (name) => {
-        if (!name) throw new Error('Department does not exist');//404
+        if (!name) throw new Error('Department does not exist');// 404
 
         const result = await db.query('SELECT id, name FROM departments WHERE LOWER(name) = $1', [name.toLowerCase()]);
         return result.rows[0] || null;
-    }
+    },
 };
