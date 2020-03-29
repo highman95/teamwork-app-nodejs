@@ -8,21 +8,10 @@ module.exports = {
             const totalCount = await modelPost.fetchCount();
             let feeds = await modelPost.fetchAll(null, page, limit);
 
-            feeds = feeds ? feeds.map(row => {
-                const {
-                    id, title, content: article, image_url: url, post_type_id: postTypeId,
-                    user_id: authorId, created_at: createdOn, name: type,
-                } = row;
-
-                return {
-                    id,
-                    createdOn,
-                    title,
-                    ...(postTypeId === 1 ? { url } : { article }),
-                    authorId,
-                    type,
-                };
-            }) : [];
+            feeds = feeds.map(row => {
+                const { id, title, content: article, image_url: url, post_type_id: postTypeId, user_id: authorId, created_at: createdOn, } = row;
+                return { id, createdOn, title, ...(postTypeId === 1 ? { url } : { article }), authorId, };
+            });
 
             const pages = limit < 1 ? 1 : Math.ceil(totalCount / limit)
             const meta = { page, pages, totalCount }

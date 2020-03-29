@@ -58,15 +58,14 @@ module.exports = {
 
         try {
             const post = await modelPost.find(articleId);
-            const postComments = await modelComment.fetchAll(post.id);
+            let comments = await modelComment.fetchAll(post.id);
 
-            const comments = postComments.map((postComment) => {
-                const { id: commentId, comment, user_id: authorId } = postComment;
+            comments = comments.map(({ id: commentId, comment, user_id: authorId }) => {
                 return { commentId, comment, authorId };
             });
 
-            const { id, title, content: article, created_at: createdOn, name: type } = post;
-            res.status(200).json({ status: 'success', data: { id, createdOn, title, article, comments, type } });
+            const { id, title, content: article, created_at: createdOn } = post;
+            res.status(200).json({ status: 'success', data: { id, createdOn, title, article, comments } });
         } catch (e) {
             next(e)
         }
