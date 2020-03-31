@@ -4,19 +4,20 @@ const modelRole = require('./role');
 
 const isValidEmail = (email) => (email && /^([a-zA-Z0-9_\-]+)(\.)?([a-zA-Z0-9_\-]+)@([a-zA-Z]+)\.([a-zA-Z]{2,})$/.test(email));
 
+const validateParameters = (submissions, params) => {
+    Object.entries(submissions).map(([key, value]) => {
+        if (!params.includes(key)) throw new Error(`Invalid Parameter - ${key} - supplied`); // 400
+        if (!value.trim()) throw new Error(`${key.charAt(0).toUpperCase().concat(key.substring(1))} is missing`); // 400
+        return { [key]: value };
+    });
+};
+
 module.exports = {
     async create(firstName, lastName, email, password, gender, address, roleName, departmentName) {
         if ((await this.findByEmail(email)).id) throw new Error('E-mail address already exists');// 409
 
         const params = ['firstName', 'lastName', 'password', 'gender'];
-        Object.entries({
-            firstName, lastName, password, gender,
-        }).map(([key, value]) => {
-            if (!params.includes(key)) throw new Error(`Invalid Parameter - ${key} - supplied`);// 400
-            if (!value.trim()) throw new Error(`${key.charAt(0).toUpperCase().concat(key.substring(1))} is missing`);// 400
-
-            return { [key]: value };
-        });
+        validateParameters({ firstName, lastName, password, gender }, params);
 
         const role = await modelRole.findByName(roleName);
         if (!role.id) throw new ReferenceError('Role does not exist');// 404
@@ -29,7 +30,7 @@ module.exports = {
             const input = [firstName, lastName, email, hashedPassword, gender, address, role.id, department.id];
 
             const result = await db.query('INSERT INTO users (first_name, last_name, email, password, gender, address, role_id, department_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id', input);
-            return result.rows[0] || null;
+            return result.rows[0] || {};
         } catch (e) {
             throw new Error('User could not be saved');
         }
