@@ -5,7 +5,7 @@ module.exports = {
     },
 
     findByName: async (name) => {
-        if (!name) throw new ReferenceError('Role does not exist');// 404
+        if (!name) throw new Error('Role cannot be empty');// 400
 
         const result = await db.query('SELECT id, name FROM roles WHERE LOWER(name) = $1', [name.toLowerCase()]);
         return result.rows[0] || {};
