@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const modelDepartment = require('./department');
 const modelRole = require('./role');
 
-const isValidEmail = (email) => (email && /^([a-zA-Z0-9_\-]+)(\.)?([a-zA-Z0-9_\-]+)@([a-zA-Z]+)\.([a-zA-Z]{2,})$/.test(email));
+const isValidEmail = (email) => (email && /^([a-zA-Z0-9_\-]+)(\.)?([a-zA-Z0-9_\-]+)@([a-zA-Z]+)\.([a-zA-Z]{2,})$/.test(email));// eslint-disable-line no-useless-escape
 
 const validateParameters = (submissions, params) => {
     Object.entries(submissions).map(([key, value]) => {
@@ -17,7 +17,9 @@ module.exports = {
         if ((await this.findByEmail(email)).id) throw new Error('E-mail address already exists');// 409
 
         const params = ['firstName', 'lastName', 'password', 'gender'];
-        validateParameters({ firstName, lastName, password, gender }, params);
+        validateParameters({
+            firstName, lastName, password, gender,
+        }, params);
 
         const role = await modelRole.findByName(roleName);
         if (!role.id) throw new ReferenceError('Role does not exist');// 404
@@ -29,7 +31,7 @@ module.exports = {
             const hashedPassword = await bcrypt.hash(password, 10);
             const input = [firstName, lastName, email, hashedPassword, gender, address, role.id, department.id];
 
-            const result = await db.query('INSERT INTO users (first_name, last_name, email, password, gender, address, role_id, department_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id', input);
+            const result = await db.query('INSERT INTO users (first_name, last_name, email, password, gender, address, role_id, department_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id', input);// eslint-disable-line no-undef
             return result.rows[0] || {};
         } catch (e) {
             throw new Error('User could not be saved');
@@ -53,7 +55,7 @@ module.exports = {
     findByEmail: async (email) => {
         if (!isValidEmail(email)) throw new Error('E-mail address is invalid');
 
-        const result = await db.query('SELECT id, first_name, last_name, email, password FROM users WHERE email = $1', [email]);
+        const result = await db.query('SELECT id, first_name, last_name, email, password FROM users WHERE email = $1', [email]);// eslint-disable-line no-undef
         return result.rows[0] || {};
     },
 };

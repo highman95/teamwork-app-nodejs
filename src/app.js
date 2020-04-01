@@ -30,12 +30,12 @@ app.set('view engine', 'hbs');// .set('views', path.join(__dirname, '../template
 // hbs.registerPartials(path.join(__dirname, '../templates/partials'))
 
 app.use(express.static(path.join(__dirname, '../public')));
-app.use('/api/v1', routes(router), (err, req, res, next) => {
+app.use('/api/v1', routes(router), (err, req, res, next) => { // eslint-disable-line no-unused-vars
     // console.log(`${err.name || err.error.name} --- ${err.message || err.error.message}`);
 
     const isBR = (err.name === 'ReferenceError');
     const isCSE = ['TokenExpiredError', 'EvalError', 'Error'].includes(err.name);
-    res.status(err.statusCode || (isBR ? 404 : (isCSE ? 400 : 500))).send({ status: 'error', error: err.message || err.error.message });
+    res.status(err.statusCode || (isBR ? 404 : (isCSE ? 400 : 500))).send({ status: 'error', error: err.message || err.error.message });// eslint-disable-line no-nested-ternary
 });
 
 module.exports = app;
