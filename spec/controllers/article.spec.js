@@ -16,7 +16,7 @@ describe('ArticleController Test Suite', () => {
         const hostName = address === '::' ? `http://localhost:${port}` : '';
         endPoint = `${hostName}/api/v1/articles`;
 
-        const token = jwt.sign({ userId: 1 }, process.env.JWT_SECRET);
+        const token = jwt.sign({ userId: 1 }, process.env.JWT_SECRET, { expiresIn: '24h', subject: process.env.JWT_SUBJECT, issuer: process.env.JWT_ISSUER });
         options = { headers: { token } };
     });
 

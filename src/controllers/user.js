@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const model = require('../models/user');
 
-const generateToken = (payload) => jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h', subject: 'TeamWork-nodeJS' });
+const generateToken = (payload) => jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h', subject: process.env.JWT_SUBJECT, issuer: process.env.JWT_ISSUER });
 
 module.exports = {
     createOne: async (req, res, next) => {
