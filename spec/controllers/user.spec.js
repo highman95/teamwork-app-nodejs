@@ -182,7 +182,7 @@ describe('UserController Test Suite', () => {
                 });
             });
 
-            it('should return statusCode 404', () => expect(responseBox.response.statusCode).toBe(404));
+            it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
             it('should return error status', () => expect(responseBox.body.status).toBe('error'));
             it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
         });

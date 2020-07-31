@@ -1,18 +1,19 @@
 const jwt = require('jsonwebtoken');
 
 const auth = (req, res, next) => {
-    const { token } = req.headers;
-    if (!token || token === '') {
-        return next(new Error('Token is missing'))
+    const { token = '' } = req.headers;// .authorization.split(' ')[1];
+    if (!token || !token.trim()) {
+        next(new Error('Token is missing'));
+        return;
     }
 
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    if (req.body.userId && req.body.userId !== decodedToken.userId) {
-        return next(new Error('Token verification failed'));
+    try {
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET, { expiresIn: '24h', subject: process.env.JWT_SUBJECT, issuer: process.env.JWT_ISSUER });
+        req.userId = decodedToken.userId;
+        next();
+    } catch (e) {
+        next(new Error('Token is invalid'));
     }
-
-    req.userId = decodedToken.userId;
-    next();
 };
 
 module.exports = auth;

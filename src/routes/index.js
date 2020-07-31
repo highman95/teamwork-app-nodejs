@@ -13,5 +13,10 @@ module.exports = (router) => {
     roleRoutes(router);
     departmentRoutes(router);
 
+    // set a default PING / Health-Check route
+    router.get('/ping', (req, res) => res.json({ status: 'success', error: 'Page Pongs...' }));
+
+    // set a default route
+    router.get('*', (req, res, next) => next(new ReferenceError('Page no longer exists')));
     return router;
 };

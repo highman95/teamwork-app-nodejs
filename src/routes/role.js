@@ -1,5 +1,5 @@
-const roleController = require('../controllers/role');
+const controller = require('../controllers/role');
 
 module.exports = (router) => {
-    router.get('/roles', roleController.getRoles);
+    router.get('/roles', controller.getRoles);
 };
