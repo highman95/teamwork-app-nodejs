@@ -1,11 +1,12 @@
 const path = require('path');
 const express = require('express');
+const compression = require('compression');
 // const hbs = require('hbs');
 const routes = require('./routes');
 const db = require('./configs/db');
 
 const app = express();
-const router = express.Router();
+app.use(compression()); // compress server-response
 
 
 // handle CORS
@@ -30,7 +31,7 @@ app.set('view engine', 'hbs');// .set('views', path.join(__dirname, '../template
 // hbs.registerPartials(path.join(__dirname, '../templates/partials'))
 
 app.use(express.static(path.join(__dirname, '../public')));
-app.use('/api/v1', routes(router), (err, req, res, next) => { // eslint-disable-line no-unused-vars
+app.use('/api/v1', routes(express.Router()), (err, req, res, next) => { // eslint-disable-line no-unused-vars
     // console.log(`${err.name || err.error.name} --- ${err.message || err.error.message}`);
 
     const isBR = (err.name === 'ReferenceError');
