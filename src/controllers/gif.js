@@ -57,7 +57,9 @@ module.exports = {
             const post = await modelPost.find(gifId);
             let comments = await modelComment.fetchAll(post.id);
 
-            comments = comments.map(({ id: commentId, comment, user_id: authorId }) => ({ commentId, comment, authorId }));
+            comments = comments.map(({ id: commentId, comment, user_id: authorId }) => (
+                { commentId, comment, authorId }
+            ));
             const {
                 id, title, image_url: url, created_at: createdOn,
             } = post;

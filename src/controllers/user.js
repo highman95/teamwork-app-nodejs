@@ -10,7 +10,9 @@ module.exports = {
         } = req.body;
 
         try {
-            const user = await model.create(firstName, lastName, email, password, gender, address, jobRole, department);
+            const user = await model.create(
+                firstName, lastName, email, password, gender, address, jobRole, department,
+            );
             const token = generateToken({ userId: user.id });
 
             res.status(201).json({ status: 'success', data: { message: 'User account successfully created', token, userId: user.id } });
@@ -23,7 +25,7 @@ module.exports = {
         const { email, password } = req.body;
 
         try {
-            const user = await model.verify(email, password);
+            const user = await model.authenticate(email, password);
             const token = generateToken({ userId: user.id });
 
             res.status(200).json({ status: 'success', data: { token, userId: user.id, firstName: user.first_name } });

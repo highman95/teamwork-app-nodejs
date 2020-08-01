@@ -29,7 +29,9 @@ module.exports = {
 
         try {
             const hashedPassword = await bcrypt.hash(password, 10);
-            const input = [firstName, lastName, email, hashedPassword, gender, address, role.id, department.id];
+            const input = [
+                firstName, lastName, email, hashedPassword, gender, address, role.id, department.id,
+            ];
 
             const result = await db.query('INSERT INTO users (first_name, last_name, email, password, gender, address, role_id, department_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id', input);// eslint-disable-line no-undef
             return result.rows[0] || {};
@@ -38,7 +40,7 @@ module.exports = {
         }
     },
 
-    async verify(email, password) {
+    async authenticate(email, password) {
         if (!password || !password.trim()) throw new Error('Password cannot be blank');// 400
 
         try {
