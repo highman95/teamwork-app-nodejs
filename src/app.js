@@ -34,9 +34,10 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/api/v1', routes(express.Router()), (err, req, res, next) => { // eslint-disable-line no-unused-vars
     // console.log(`${err.name || err.error.name} --- ${err.message || err.error.message}`);
 
-    const isBR = (err.name === 'ReferenceError');
-    const isCSE = ['TokenExpiredError', 'EvalError', 'Error'].includes(err.name);
-    res.status(err.statusCode || (isBR ? 404 : (isCSE ? 400 : 500))).send({ status: 'error', error: err.message || err.error.message });// eslint-disable-line no-nested-ternary
+    const isBRE = (err.name === 'ReferenceError');// bad-reference error
+    const isTAE = ['TokenExpiredError', 'JsonWebTokenError'].includes(err.name) || (['token'].includes(err.message.toLowerCase()) && ['missing', 'invalid'].includes(err.message));
+    const isCSE = ['EvalError', 'Error'].includes(err.name);// client-side (input) error
+    res.status(err.statusCode || (isBRE ? 404 : (isTAE ? 401 : (isCSE ? 400 : 500)))).send({ status: 'error', error: err.message || err.error.message });// eslint-disable-line no-nested-ternary
 });
 
 module.exports = app;
