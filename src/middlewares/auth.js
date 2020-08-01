@@ -12,7 +12,7 @@ const auth = (req, res, next) => {
         req.userId = decodedToken.userId;
         next();
     } catch (e) {
-        next(new Error('Token is invalid'));
+        next(new Error(`Token is ${(e.name === 'TokenExpiredError') ? 'expired' : 'invalid'}`));
     }
 };
 
