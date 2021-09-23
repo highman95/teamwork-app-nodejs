@@ -1,17 +1,14 @@
-require('dotenv').config();
-
+/* eslint-disable no-undef */
 const request = require('request');
 const jwt = require('jsonwebtoken');
+const server = require('../../src/index');
 
 describe('ArticleController Test Suite', () => {
-    let server;
     let endPoint;
     let options = {};
     let articleId;
 
     beforeAll(() => {
-        server = require('../../src/index');
-
         const { address, port } = server.address();
         const hostName = address === '::' ? `http://localhost:${port}` : '';
         endPoint = `${hostName}/api/v1/articles`;
@@ -26,12 +23,12 @@ describe('ArticleController Test Suite', () => {
         let testData = {};
 
         beforeEach(() => {
-            let data = {
+            const data = {
                 title: 'Once upon a time in China',
                 article: 'Story Story...Story........Once upon a time....Time Time',
             };
 
-            testData = Object.assign({}, data);
+            testData = { ...data };
         });
 
         describe('title is not specified', () => {
@@ -40,7 +37,9 @@ describe('ArticleController Test Suite', () => {
             beforeAll((done) => {
                 testData.title = '';
 
-                request.post({ url: endPoint, ...options, form: testData, json: true }, (error, response, body) => {
+                request.post({
+                    url: endPoint, ...options, form: testData, json: true,
+                }, (error, response, body) => {
                     responseBox = { response, body };
                     done();
                 });
@@ -57,7 +56,9 @@ describe('ArticleController Test Suite', () => {
             beforeAll((done) => {
                 testData.article = '';
 
-                request.post({ url: endPoint, ...options, form: testData, json: true }, (error, response, body) => {
+                request.post({
+                    url: endPoint, ...options, form: testData, json: true,
+                }, (error, response, body) => {
                     responseBox = { response, body };
                     done();
                 });
@@ -72,9 +73,11 @@ describe('ArticleController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.post({ url: endPoint, ...options, form: testData, json: true }, (error, response, body) => {
+                request.post({
+                    url: endPoint, ...options, form: testData, json: true,
+                }, (error, response, body) => {
                     responseBox = { response, body };
-                    articleId = responseBox.body.data.articleId;//set the test article-id
+                    articleId = responseBox.body.data.articleId;// set the test article-id
                     done();
                 });
             });
@@ -129,7 +132,7 @@ describe('ArticleController Test Suite', () => {
 
         beforeEach(() => {
             const data = { comment: 'it is just a comment' };
-            testData = Object.assign({}, data);
+            testData = { ...data };
         });
 
         describe('article comment is not specified', () => {
@@ -138,7 +141,9 @@ describe('ArticleController Test Suite', () => {
             beforeAll((done) => {
                 testData.comment = '';
 
-                request.post({ url: `${endPoint}/${articleId}/comment`, ...options, form: testData, json: true }, (error, response, body) => {
+                request.post({
+                    url: `${endPoint}/${articleId}/comment`, ...options, form: testData, json: true,
+                }, (error, response, body) => {
                     responseBox = { response, body };
                     done();
                 });
@@ -153,7 +158,9 @@ describe('ArticleController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.post({ url: `${endPoint}/${articleId}/comment`, ...options, form: testData, json: true }, (error, response, body) => {
+                request.post({
+                    url: `${endPoint}/${articleId}/comment`, ...options, form: testData, json: true,
+                }, (error, response, body) => {
                     responseBox = { response, body };
                     done();
                 });

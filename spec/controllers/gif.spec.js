@@ -1,18 +1,15 @@
-require('dotenv').config();
-
+/* eslint-disable no-undef */
 const fs = require('fs');
 const request = require('request');
 const jwt = require('jsonwebtoken');
+const server = require('../../src/index');
 
 describe('GifController Test Suite', () => {
-    let server;
     let endPoint;
     let options = {};
     let gifId;
 
     beforeAll(() => {
-        server = require('../../src/index');
-
         const { address, port } = server.address();
         const hostName = address === '::' ? `http://localhost:${port}` : '';
         endPoint = `${hostName}/api/v1/gifs`;
@@ -27,12 +24,12 @@ describe('GifController Test Suite', () => {
         let testFormData = {};
 
         beforeEach(() => {
-            let data = {
+            const data = {
                 title: 'Once upon a time in Tokyo',
-                image: fs.createReadStream('public/images/sample.gif')
-            }
+                image: fs.createReadStream('public/images/sample.gif'),
+            };
 
-            testFormData = Object.assign({}, data);
+            testFormData = { ...data };
         });
 
         describe('title is not specified', () => {
@@ -41,7 +38,9 @@ describe('GifController Test Suite', () => {
             beforeAll((done) => {
                 testFormData.title = '';
 
-                request.post({ url: endPoint, ...options, formData: testFormData, json: true }, (error, response, body) => {
+                request.post({
+                    url: endPoint, ...options, formData: testFormData, json: true,
+                }, (error, response, body) => {
                     responseBox = { error, response, body };
                     done();
                 });
@@ -58,7 +57,9 @@ describe('GifController Test Suite', () => {
             beforeAll((done) => {
                 testFormData.image = '';
 
-                request.post({ url: endPoint, ...options, formData: testFormData, json: true }, (error, response, body) => {
+                request.post({
+                    url: endPoint, ...options, formData: testFormData, json: true,
+                }, (error, response, body) => {
                     responseBox = { error, response, body };
                     done();
                 });
@@ -75,7 +76,9 @@ describe('GifController Test Suite', () => {
             beforeAll((done) => {
                 testFormData.image = fs.createReadStream('public/images/sample.jpg');
 
-                request.post({ url: endPoint, ...options, formData: testFormData, json: true }, (error, response, body) => {
+                request.post({
+                    url: endPoint, ...options, formData: testFormData, json: true,
+                }, (error, response, body) => {
                     responseBox = { error, response, body };
                     done();
                 });
@@ -90,7 +93,9 @@ describe('GifController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.post({ url: endPoint, ...options, formData: testFormData, json: true }, (error, response, body) => {
+                request.post({
+                    url: endPoint, ...options, formData: testFormData, json: true,
+                }, (error, response, body) => {
                     responseBox = { error, response, body };
                     gifId = responseBox.body.data.gifId;
                     done();
@@ -149,7 +154,7 @@ describe('GifController Test Suite', () => {
 
         beforeEach(() => {
             const data = { comment: 'it is just a comment' };
-            testData = Object.assign({}, data);
+            testData = { ...data };
         });
 
         describe('GIF comment is not specified', () => {
@@ -158,7 +163,9 @@ describe('GifController Test Suite', () => {
             beforeAll((done) => {
                 testData.comment = '';
 
-                request.post({ url: `${endPoint}/${gifId}/comment`, ...options, form: testData, json: true }, (error, response, body) => {
+                request.post({
+                    url: `${endPoint}/${gifId}/comment`, ...options, form: testData, json: true,
+                }, (error, response, body) => {
                     responseBox = { error, response, body };
                     done();
                 });
@@ -173,7 +180,9 @@ describe('GifController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.post({ url: `${endPoint}/${gifId}/comment`, ...options, form: testData, json: true }, (error, response, body) => {
+                request.post({
+                    url: `${endPoint}/${gifId}/comment`, ...options, form: testData, json: true,
+                }, (error, response, body) => {
                     responseBox = { error, response, body };
                     done();
                 });

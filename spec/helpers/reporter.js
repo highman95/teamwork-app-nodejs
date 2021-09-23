@@ -1,6 +1,7 @@
-const SpecReporter = require('jasmine-spec-reporter').SpecReporter;
+/* eslint-disable no-undef */
+const { SpecReporter } = require('jasmine-spec-reporter');
 
-jasmine.getEnv().clearReporters();             // remove default reporter logs
-jasmine.getEnv().addReporter(new SpecReporter({// add jasmine-spec-reporter
-    spec: { displayPending: true, displayDuration: true }
+jasmine.getEnv().clearReporters(); // remove default reporter logs
+jasmine.getEnv().addReporter(new SpecReporter({ // add jasmine-spec-reporter
+    spec: { displayPending: true, displayDuration: true },
 }));

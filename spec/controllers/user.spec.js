@@ -1,23 +1,20 @@
-require('dotenv').config();
-
+/* eslint-disable no-undef */
 const request = require('request');
 const jwt = require('jsonwebtoken');
+const server = require('../../src/index');
 
 describe('UserController Test Suite', () => {
-    let server;
     let baseUrl;
     let testCredentialsX = {};
 
     beforeAll(() => {
-        server = require('../../src/index');
-
         const { address, port } = server.address();
         const hostName = address === '::' ? `http://localhost:${port}` : '';
         baseUrl = `${hostName}/api/v1/auth`;
 
         testCredentialsX = {
-            email: 'mark.spencer-' + Date.now() + '@oc.com',
-            password: 'markspencer'
+            email: `mark.spencer-${Date.now()}@oc.com`,
+            password: 'markspencer',
         };
     });
 
@@ -28,24 +25,24 @@ describe('UserController Test Suite', () => {
         let options = {};
 
         beforeAll(() => {
-            endPoint = baseUrl + '/create-user';
+            endPoint = `${baseUrl}/create-user`;
 
             const token = jwt.sign({ userId: 1 }, process.env.JWT_SECRET);
             options = { headers: { token } };
         });
 
         beforeEach(() => {
-            let data = {
+            const data = {
                 firstName: 'Mark',
                 lastName: 'Spencer',
                 ...testCredentialsX,
                 gender: 'male',
                 address: '',
                 jobRole: 'staff',
-                department: 'Engineering'
+                department: 'Engineering',
             };
 
-            testData = Object.assign({}, data);
+            testData = { ...data };
         });
 
         describe('role is not specified', () => {
@@ -54,7 +51,9 @@ describe('UserController Test Suite', () => {
             beforeAll((done) => {
                 testData.jobRole = '';
 
-                request.post({ url: endPoint, ...options, form: testData, json: true }, (error, response, body) => {
+                request.post({
+                    url: endPoint, ...options, form: testData, json: true,
+                }, (error, response, body) => {
                     responseBox = { error, response, body };
                     done();
                 });
@@ -71,7 +70,9 @@ describe('UserController Test Suite', () => {
             beforeAll((done) => {
                 testData.department = '';
 
-                request.post({ url: endPoint, ...options, form: testData, json: true }, (error, response, body) => {
+                request.post({
+                    url: endPoint, ...options, form: testData, json: true,
+                }, (error, response, body) => {
                     responseBox = { error, response, body };
                     done();
                 });
@@ -87,7 +88,9 @@ describe('UserController Test Suite', () => {
 
             beforeAll((done) => {
                 testData.jobRole = 'xyz';
-                request.post({ url: endPoint, ...options, form: testData, json: true }, (error, response, body) => {
+                request.post({
+                    url: endPoint, ...options, form: testData, json: true,
+                }, (error, response, body) => {
                     responseBox = { error, response, body };
                     done();
                 });
@@ -103,7 +106,9 @@ describe('UserController Test Suite', () => {
 
             beforeAll((done) => {
                 testData.department = 'xyz';
-                request.post({ url: endPoint, ...options, form: testData, json: true }, (error, response, body) => {
+                request.post({
+                    url: endPoint, ...options, form: testData, json: true,
+                }, (error, response, body) => {
                     responseBox = { error, response, body };
                     done();
                 });
@@ -118,7 +123,9 @@ describe('UserController Test Suite', () => {
             let responseBox = {};
 
             beforeAll((done) => {
-                request.post({ url: endPoint, ...options, form: testData, json: true }, (error, response, body) => {
+                request.post({
+                    url: endPoint, ...options, form: testData, json: true,
+                }, (error, response, body) => {
                     responseBox = { error, response, body };
                     done();
                 });
@@ -128,7 +135,7 @@ describe('UserController Test Suite', () => {
             it('should return success status', () => expect(responseBox.body.status).toBe('success'));
             it('should return success message', () => expect(responseBox.body.data.message).toBeDefined());
             it('should return an authentication token', () => expect(responseBox.body.data.token).toBeDefined());
-            it('should return the new user\'s valid unique-identifier', () => {// verify token with expected value
+            it('should return the new user\'s valid unique-identifier', () => { // verify token with expected value
                 let isValidNewUser;
                 try {
                     const decodedToken = jwt.verify(responseBox.body.data.token, process.env.JWT_SECRET);
@@ -143,14 +150,14 @@ describe('UserController Test Suite', () => {
     });
 
     describe('POST /auth/signin', () => {
-        let testCredentials = {}
+        let testCredentials = {};
 
         beforeAll(() => {
-            endPoint = baseUrl + '/signin';
+            endPoint = `${baseUrl}/signin`;
         });
 
         beforeEach(() => {
-            testCredentials = Object.assign({}, testCredentialsX);
+            testCredentials = { ...testCredentialsX };
         });
 
         describe('email input is blank', () => {
@@ -218,7 +225,7 @@ describe('UserController Test Suite', () => {
             it('should return statusCode 200', () => expect(responseBox.response.statusCode).toBe(200));
             it('should return success status', () => expect(responseBox.body.status).toBe('success'));
             it('should return an authentication token', () => expect(responseBox.body.data.token).toBeDefined());
-            it('should return a valid user-id', () => {// verify token with expected value
+            it('should return a valid user-id', () => { // verify token with expected value
                 let isValidUser;
                 try {
                     const decodedToken = jwt.verify(responseBox.body.data.token, process.env.JWT_SECRET);
