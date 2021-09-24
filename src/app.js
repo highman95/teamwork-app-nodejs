@@ -10,12 +10,13 @@ app.use(compression()); // compress server-response
 
 
 // handle CORS
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization, token');
-    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST, GET, PUT, DELETE, PATCH');
-    next();
-});
+const corsHandler = (req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization, token');
+  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST, GET, PUT, DELETE, PATCH');
+  next();
+};
+app.use(corsHandler);
 
 
 // parse request data to JSON object
@@ -30,14 +31,17 @@ global.db = db;
 app.set('view engine', 'hbs');// .set('views', path.join(__dirname, '../templates/views'));
 // hbs.registerPartials(path.join(__dirname, '../templates/partials'))
 
-app.use(express.static(path.join(__dirname, '../public')));
-app.use('/api/v1', routes(express.Router()), (err, req, res, next) => { // eslint-disable-line no-unused-vars
-    // console.log(`${err.name || err.error.name} --- ${err.message || err.error.message}`);
+// error-handler middleware
+const errorHandler = (err, req, res, next) => { // eslint-disable-line no-unused-vars
+  // console.log(`${err.name || err.error.name} --- ${err.message || err.error.message}`);
 
-    const isBRE = (err.name === 'ReferenceError');// bad-reference error
-    const isTAE = ['token'].includes(err.message.toLowerCase()) && ['missing', 'invalid', 'expired'].includes(err.message);
-    const isCSE = ['EvalError', 'Error'].includes(err.name);// client-side (input) error
-    res.status(err.statusCode || (isBRE ? 404 : (isTAE ? 401 : (isCSE ? 400 : 500)))).send({ status: 'error', error: err.message || err.error.message });// eslint-disable-line no-nested-ternary
-});
+  const isBRE = (err.name === 'ReferenceError');// bad-reference error
+  const isTAE = ['token'].includes(err.message.toLowerCase()) && ['missing', 'invalid', 'expired'].includes(err.message);
+  const isCSE = ['EvalError', 'Error', 'RangeError'].includes(err.name);// client-side (input) error
+  res.status(err.statusCode || (isBRE ? 404 : (isTAE ? 401 : (isCSE ? 400 : 500)))).send({ status: 'error', error: err.message || err.error.message });// eslint-disable-line no-nested-ternary
+};
+
+app.use(express.static(path.join(__dirname, '../public')));
+app.use('/api/v1', routes(express.Router()), errorHandler);
 
 module.exports = app;
