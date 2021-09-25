@@ -240,4 +240,19 @@ describe('UserController Test Suite', () => {
       });
     });
   });
+
+  describe('GET /auth/undefined (access undefined route)', () => {
+    let responseBox;
+
+    beforeAll((done) => {
+      request.get({ url: `${baseUrl}/undefined`, json: true }, (error, response, body) => {
+        responseBox = { error, response, body };
+        done();
+      });
+    });
+
+    it('should return statusCode 404', () => expect(responseBox.response.statusCode).toBe(404));
+    it('should return error status', () => expect(responseBox.body.status).toBe('error'));
+    it('should return a relevant error message', () => expect(responseBox.body.error).toBe('Page no longer exists'));
+  });
 });
