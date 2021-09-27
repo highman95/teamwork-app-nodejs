@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
 const fs = require('fs');
 const request = require('request');
-const jwt = require('jsonwebtoken');
 const server = require('../../src/index');
+const { generateToken } = require('../../src/utils/security');
 
 describe('GifController Test Suite', () => {
   let endPoint;
@@ -11,13 +11,10 @@ describe('GifController Test Suite', () => {
 
   beforeAll(() => {
     const { address, port } = server.address();
-    const hostName = address === '::' ? `http://localhost:${port}` : '';
+    const hostName = address === '::' ? `http://localhost:${port}` : address;
     endPoint = `${hostName}/api/v1/gifs`;
 
-    const token = jwt.sign({ userId: 1 }, process.env.JWT_SECRET, {
-      expiresIn: '24h', subject: process.env.JWT_SUBJECT, issuer: process.env.JWT_ISSUER,
-    });
-    options = { headers: { token } };
+    options = { headers: { token: generateToken({ id: 1 }) } };
   });
 
   // afterAll((done) => server.close(done));

@@ -35,10 +35,16 @@ app.set('view engine', 'hbs');// .set('views', path.join(__dirname, '../template
 const errorHandler = (err, req, res, next) => { // eslint-disable-line no-unused-vars
   // console.log(`${err.name || err.error.name} --- ${err.message || err.error.message}`);
 
-  const isBRE = (err.name === 'ReferenceError');// bad-reference error
+  const isBRE = (err.name === ReferenceError.name);// bad-reference error
   const isTAE = ['token'].includes(err.message.toLowerCase()) && ['missing', 'invalid', 'expired'].includes(err.message);
-  const isCSE = ['EvalError', 'Error', 'RangeError'].includes(err.name);// client-side (input) error
-  res.status(err.statusCode || (isBRE ? 404 : (isTAE ? 401 : (isCSE ? 400 : 500)))).send({ status: 'error', error: err.message || err.error.message });// eslint-disable-line no-nested-ternary
+
+  // client-side (input) error
+  const isCSE = [EvalError.name, Error.name, RangeError.name].includes(err.name);
+
+  res.status(err.statusCode || (isBRE ? 404 : (isTAE ? 401 : (isCSE ? 400 : 500)))).send({ // eslint-disable-line no-nested-ternary, max-len
+    status: 'error',
+    error: err.message || err.error.message,
+  });
 };
 
 app.use(express.static(path.join(__dirname, '../public')));

@@ -80,7 +80,12 @@ module.exports = {
 
     try {
       await modelPost.delete(gifId);
-      res.status(200).json({ status: 'success', data: { message: 'GIF post successfully deleted' } });
+      res.status(200).json({
+        status: 'success',
+        data: {
+          message: 'GIF post successfully deleted',
+        },
+      });
     } catch (e) {
       next(e);
     }

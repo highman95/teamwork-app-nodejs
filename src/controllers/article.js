@@ -57,7 +57,12 @@ module.exports = {
       const post = await modelPost.find(articleId);
       await modelPost.update(post.id, title, article);
 
-      res.status(200).json({ status: 'success', data: { message: 'Article successfully updated', title, article } });
+      res.status(200).json({
+        status: 'success',
+        data: {
+          message: 'Article successfully updated', title, article,
+        },
+      });
     } catch (e) {
       next(e);
     }
@@ -93,7 +98,12 @@ module.exports = {
 
     try {
       await modelPost.delete(articleId);
-      res.status(200).json({ status: 'success', data: { message: 'Article successfully deleted' } });
+      res.status(200).json({
+        status: 'success',
+        data: {
+          message: 'Article successfully deleted',
+        },
+      });
     } catch (e) {
       next(e);
     }

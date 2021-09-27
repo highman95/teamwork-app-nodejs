@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const request = require('request');
-const jwt = require('jsonwebtoken');
 const server = require('../../src/index');
+const { generateToken, verifyToken } = require('../../src/utils/security');
 
 describe('UserController Test Suite', () => {
   let baseUrl;
@@ -9,7 +9,7 @@ describe('UserController Test Suite', () => {
 
   beforeAll(() => {
     const { address, port } = server.address();
-    const hostName = address === '::' ? `http://localhost:${port}` : '';
+    const hostName = address === '::' ? `http://localhost:${port}` : address;
     baseUrl = `${hostName}/api/v1/auth`;
 
     testCredentialsX = {
@@ -26,9 +26,7 @@ describe('UserController Test Suite', () => {
 
     beforeAll(() => {
       endPoint = `${baseUrl}/create-user`;
-
-      const token = jwt.sign({ userId: 1 }, process.env.JWT_SECRET);
-      options = { headers: { token } };
+      options = { headers: { token: generateToken({ id: 1 }) } };
     });
 
     beforeEach(() => {
@@ -140,7 +138,7 @@ describe('UserController Test Suite', () => {
       it('should return the new user\'s valid unique-identifier', () => { // verify token with expected value
         let isValidNewUser;
         try {
-          const decodedToken = jwt.verify(responseBox.body.data.token, process.env.JWT_SECRET);
+          const decodedToken = verifyToken(responseBox.body.data.token);
           isValidNewUser = (decodedToken.userId === responseBox.body.data.userId);
         } catch (e) {
           isValidNewUser = false;
@@ -230,7 +228,7 @@ describe('UserController Test Suite', () => {
       it('should return a valid user-id', () => { // verify token with expected value
         let isValidUser;
         try {
-          const decodedToken = jwt.verify(responseBox.body.data.token, process.env.JWT_SECRET);
+          const decodedToken = verifyToken(responseBox.body.data.token);
           isValidUser = (decodedToken.userId === responseBox.body.data.userId);
         } catch (e) {
           isValidUser = false;
