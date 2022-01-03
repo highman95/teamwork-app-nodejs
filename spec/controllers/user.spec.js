@@ -52,6 +52,7 @@ describe('UserController Test Suite', () => {
         request.post({
           url: endPoint, ...options, form: testData, json: true,
         }, (error, response, body) => {
+          // console.log('----test-data-r=', testData, body.error);
           responseBox = { error, response, body };
           done();
         });
@@ -71,6 +72,7 @@ describe('UserController Test Suite', () => {
         request.post({
           url: endPoint, ...options, form: testData, json: true,
         }, (error, response, body) => {
+          // console.log('----test-data-d=', testData, body.error);
           responseBox = { error, response, body };
           done();
         });
@@ -126,6 +128,7 @@ describe('UserController Test Suite', () => {
         request.post({
           url: endPoint, ...options, form: testData, json: true,
         }, (error, response, body) => {
+          // console.log('----test-dataD=', testData, body.error);
           responseBox = { error, response, body };
           done();
         });
