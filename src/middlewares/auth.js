@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+const { verifyToken, TokenExpiredError } = require('../utils/security');
 
 const auth = (req, res, next) => {
   const { token = '' } = req.headers;// .authorization.split(' ')[1];
@@ -8,11 +8,11 @@ const auth = (req, res, next) => {
   }
 
   try {
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET, { expiresIn: '24h', subject: process.env.JWT_SUBJECT, issuer: process.env.JWT_ISSUER });
+    const decodedToken = verifyToken(token);
     req.userId = decodedToken.userId;
     next();
   } catch (e) {
-    next(new Error(`Token is ${(e.name === 'TokenExpiredError') ? 'expired' : 'invalid'}`));
+    next(new Error(`Token is ${(e.name === TokenExpiredError.name) ? 'expired' : 'invalid'}`));
   }
 };
 
