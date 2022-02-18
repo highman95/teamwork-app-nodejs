@@ -5,7 +5,9 @@ const postTypeId = 1;
 
 module.exports = {
   create: async (title, imageFile, userId) => {
-    if (!imageFile || !imageFile.path.trim()) throw new Error('GIF image is missing');// 400
+    if (!imageFile || !imageFile.path || !imageFile.path.trim()) {
+      throw new Error('GIF image is missing'); // 400
+    }
 
     let response;
     try {
@@ -15,7 +17,7 @@ module.exports = {
       // await fs.unlink(file.path);
     } catch (e) {
       // console.error('[Cloudinary] Error: ', e.message || e.error.message);
-      throw new Error('GIF image could not uploaded (Cloud)');// 500
+      throw new Error('GIF image could not uploaded (Cloud)'); // 500
     }
 
     return modelPost.create(postTypeId, title, null, response.url, userId);
