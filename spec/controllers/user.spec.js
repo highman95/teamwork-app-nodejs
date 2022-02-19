@@ -43,7 +43,7 @@ describe('UserController Test Suite', () => {
       testData = { ...data };
     });
 
-    describe('role is not specified', () => {
+    describe('Role is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -63,7 +63,7 @@ describe('UserController Test Suite', () => {
       it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
     });
 
-    describe('department is not specified', () => {
+    describe('Department is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -83,7 +83,7 @@ describe('UserController Test Suite', () => {
       it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
     });
 
-    describe('a non-existing role is specified', () => {
+    describe('A non-existing role is specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -102,7 +102,7 @@ describe('UserController Test Suite', () => {
       it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
     });
 
-    describe('a non-existing department is specified', () => {
+    describe('A non-existing department is specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -121,7 +121,7 @@ describe('UserController Test Suite', () => {
       it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
     });
 
-    describe('all required parameters are sent', () => {
+    describe('All required parameters are sent', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -163,7 +163,7 @@ describe('UserController Test Suite', () => {
       testCredentials = { ...testCredentialsX };
     });
 
-    describe('email input is blank', () => {
+    describe('E-mail input is blank', () => {
       let responseBox;
 
       beforeAll((done) => {
@@ -180,7 +180,7 @@ describe('UserController Test Suite', () => {
       it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
     });
 
-    describe('an invalid email is supplied', () => {
+    describe('An invalid email is supplied', () => {
       let responseBox;
 
       beforeAll((done) => {
@@ -197,7 +197,7 @@ describe('UserController Test Suite', () => {
       it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
     });
 
-    describe('blank(invalid) password is supplied', () => {
+    describe('Blank(invalid) password is supplied', () => {
       let responseBox;
 
       beforeAll((done) => {
@@ -214,7 +214,7 @@ describe('UserController Test Suite', () => {
       it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
     });
 
-    describe('valid credentials are supplied', () => {
+    describe('Valid credentials are supplied', () => {
       let responseBox;
 
       beforeAll((done) => {

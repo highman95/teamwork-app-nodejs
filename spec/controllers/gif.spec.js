@@ -31,7 +31,7 @@ describe('GifController Test Suite', () => {
       testFormData = { ...data };
     });
 
-    describe('title is not specified', () => {
+    describe('Title is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -50,7 +50,7 @@ describe('GifController Test Suite', () => {
       it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
     });
 
-    describe('image is not specified/uploaded', () => {
+    describe('Image is not specified/uploaded', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -69,7 +69,7 @@ describe('GifController Test Suite', () => {
       it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
     });
 
-    describe('non-GIF image is uploaded', () => {
+    describe('Non-GIF image is uploaded', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -88,7 +88,7 @@ describe('GifController Test Suite', () => {
       it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
     });
 
-    describe('a title and GIF image are specified', () => {
+    describe('A title and GIF image are specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -113,7 +113,7 @@ describe('GifController Test Suite', () => {
 
 
   describe('GET /gifs/:gifId', () => {
-    describe('invalid gifId is specified', () => {
+    describe('Invalid gifId is specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -128,7 +128,7 @@ describe('GifController Test Suite', () => {
       it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
     });
 
-    describe('valid gifId is specified', () => {
+    describe('Valid gifId is specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {

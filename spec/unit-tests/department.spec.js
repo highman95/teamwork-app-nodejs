@@ -1,11 +1,11 @@
 /* eslint-disable no-undef */
 const departmentService = require('../../src/models/department');
 
-describe('Gif-Service Test Suite', () => {
+describe('Department-Service Test Suite', () => {
   beforeAll(() => {});
 
   describe('Find Department', () => {
-    describe('name is not specified', () => {
+    describe('Name is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {

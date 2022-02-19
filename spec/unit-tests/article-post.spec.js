@@ -1,11 +1,11 @@
 /* eslint-disable no-undef */
 const articlePostService = require('../../src/models/article-post');
 
-describe('Article-Service Test Suite', () => {
+describe('Article-Post-Service Test Suite', () => {
   beforeAll(() => {});
 
   describe('Create Article-Post', () => {
-    describe('content is not specified', () => {
+    describe('Content is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -20,7 +20,7 @@ describe('Article-Service Test Suite', () => {
   });
 
   describe('Update Article-Post', () => {
-    describe('content is not specified', () => {
+    describe('Content is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {

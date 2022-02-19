@@ -30,7 +30,7 @@ describe('ArticleController Test Suite', () => {
       testData = { ...data };
     });
 
-    describe('title is not specified', () => {
+    describe('Title is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -49,7 +49,7 @@ describe('ArticleController Test Suite', () => {
       it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
     });
 
-    describe('article is not specified', () => {
+    describe('Article is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -68,7 +68,7 @@ describe('ArticleController Test Suite', () => {
       it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
     });
 
-    describe('all required parameters are specified', () => {
+    describe('All required parameters are specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -92,7 +92,7 @@ describe('ArticleController Test Suite', () => {
 
 
   describe('GET /articles/:articleId', () => {
-    describe('invalid articleId is specified', () => {
+    describe('Invalid articleId is specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -107,7 +107,7 @@ describe('ArticleController Test Suite', () => {
       it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
     });
 
-    describe('valid articleId is specified', () => {
+    describe('Valid articleId is specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -134,7 +134,7 @@ describe('ArticleController Test Suite', () => {
       testData = { ...data };
     });
 
-    describe('article comment is not specified', () => {
+    describe('Article comment is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -153,7 +153,7 @@ describe('ArticleController Test Suite', () => {
       it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
     });
 
-    describe('article comment is specified', () => {
+    describe('Article comment is specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -176,7 +176,7 @@ describe('ArticleController Test Suite', () => {
 
 
   describe('DELETE /articles/:articleId', () => {
-    describe('article-id is specified', () => {
+    describe('Article-id is specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {

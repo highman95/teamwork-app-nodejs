@@ -5,7 +5,7 @@ describe('Post-Service Test Suite', () => {
   beforeAll(() => {});
 
   describe('Create Post', () => {
-    describe('title is not specified', () => {
+    describe('Title is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -15,11 +15,10 @@ describe('Post-Service Test Suite', () => {
         });
       });
 
-      it('should return a relevant error message', () => expect(responseBox.message).toBeDefined());
       it('should return error status', () => expect(responseBox.message).toBe('Title is missing'));
     });
 
-    describe('user-id is not specified', () => {
+    describe('User-id is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -34,7 +33,7 @@ describe('Post-Service Test Suite', () => {
   });
 
   describe('Update Post', () => {
-    describe('title is not specified', () => {
+    describe('Title is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -47,7 +46,7 @@ describe('Post-Service Test Suite', () => {
       it('should return error message', () => expect(responseBox.message).toBe('Title is missing'));
     });
 
-    describe('post-id is not specified', () => {
+    describe('Post-id is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {

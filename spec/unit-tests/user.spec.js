@@ -22,7 +22,7 @@ describe('User-Service Test Suite', () => {
       email = `mark.spencer-${Date.now()}@oc.com`;
     });
 
-    describe('e-mail is not specified', () => {
+    describe('E-mail is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -144,7 +144,7 @@ describe('User-Service Test Suite', () => {
   });
 
   describe('Authenticate User', () => {
-    describe('password is not specified', () => {
+    describe('Password is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -157,7 +157,7 @@ describe('User-Service Test Suite', () => {
       it('should return error message', () => expect(responseBox.message).toBe('Password cannot be blank'));
     });
 
-    describe('username/e-mail is not specified', () => {
+    describe('Username/E-mail is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {

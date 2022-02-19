@@ -5,7 +5,7 @@ describe('Comment Test Suite', () => {
   beforeAll(() => {});
 
   describe('Create Comment', () => {
-    describe('comment/statement is not specified', () => {
+    describe('Comment/Statement is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -18,7 +18,7 @@ describe('Comment Test Suite', () => {
       it('should return error message', () => expect(responseBox.message).toBe('Comment/statement is missing'));
     });
 
-    describe('post-id is invalid', () => {
+    describe('Post-id is invalid', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -31,7 +31,7 @@ describe('Comment Test Suite', () => {
       it('should return error message', () => expect(responseBox.message).toBe('Post does not exist'));
     });
 
-    describe('user-id is not specified', () => {
+    describe('User-id is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -46,7 +46,7 @@ describe('Comment Test Suite', () => {
   });
 
   describe('Fetch-all Comment(s)', () => {
-    describe('post-id is invalid', () => {
+    describe('Post-id is invalid', () => {
       let responseBox = {};
 
       beforeAll((done) => {

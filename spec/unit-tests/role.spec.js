@@ -5,7 +5,7 @@ describe('Role-Service Test Suite', () => {
   beforeAll(() => {});
 
   describe('Find Role', () => {
-    describe('name is not specified', () => {
+    describe('Name is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
