@@ -2,8 +2,6 @@
 const commentService = require('../../src/models/comment');
 
 describe('Comment Test Suite', () => {
-  beforeAll(() => {});
-
   describe('Create Comment', () => {
     describe('Comment/Statement is not specified', () => {
       let responseBox = {};

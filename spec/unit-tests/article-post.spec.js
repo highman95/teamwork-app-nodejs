@@ -2,8 +2,6 @@
 const articlePostService = require('../../src/models/article-post');
 
 describe('Article-Post-Service Test Suite', () => {
-  beforeAll(() => {});
-
   describe('Create Article-Post', () => {
     describe('Content is not specified', () => {
       let responseBox = {};

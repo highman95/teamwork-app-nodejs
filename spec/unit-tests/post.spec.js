@@ -2,8 +2,6 @@
 const postService = require('../../src/models/post');
 
 describe('Post-Service Test Suite', () => {
-  beforeAll(() => {});
-
   describe('Create Post', () => {
     describe('Title is not specified', () => {
       let responseBox = {};

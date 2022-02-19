@@ -2,8 +2,6 @@
 const roleService = require('../../src/models/role');
 
 describe('Role-Service Test Suite', () => {
-  beforeAll(() => {});
-
   describe('Find Role', () => {
     describe('Name is not specified', () => {
       let responseBox = {};

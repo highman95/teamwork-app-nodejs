@@ -2,8 +2,6 @@
 const gifPostService = require('../../src/models/gif-post');
 
 describe('Gif-Post-Service Test Suite', () => {
-  beforeAll(() => {});
-
   describe('Create Gif-Post', () => {
     describe('No gif-image is not specified', () => {
       let responseBox = {};

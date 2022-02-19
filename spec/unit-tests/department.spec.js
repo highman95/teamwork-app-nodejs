@@ -2,8 +2,6 @@
 const departmentService = require('../../src/models/department');
 
 describe('Department-Service Test Suite', () => {
-  beforeAll(() => {});
-
   describe('Find Department', () => {
     describe('Name is not specified', () => {
       let responseBox = {};

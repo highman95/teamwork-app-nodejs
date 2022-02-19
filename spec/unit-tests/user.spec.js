@@ -13,8 +13,6 @@ describe('User-Service Test Suite', () => {
     department: 'Engineering',
   };
 
-  beforeAll(() => {});
-
   describe('Create User', () => {
     let email = '';
 
