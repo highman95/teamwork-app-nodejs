@@ -40,7 +40,16 @@ describe('User-Service Test Suite', () => {
 
       beforeAll((done) => {
         userService
-          .create(account.firstName, account.lastName, account.email, account.password, account.gender, account.address, account.jobRole, account.department)
+          .create(
+            account.firstName,
+            account.lastName,
+            account.email,
+            account.password,
+            account.gender,
+            account.address,
+            account.jobRole,
+            account.department,
+          )
           .then((result) => {
             responseBox = result;
             done();
@@ -100,7 +109,16 @@ describe('User-Service Test Suite', () => {
 
       beforeAll((done) => {
         userService
-          .create(account.firstName, account.lastName, email, account.password, null, account.address, null, null)
+          .create(
+            account.firstName,
+            account.lastName,
+            email,
+            account.password,
+            null,
+            account.address,
+            null,
+            null,
+          )
           .catch((error) => {
             responseBox = error;
             done();
