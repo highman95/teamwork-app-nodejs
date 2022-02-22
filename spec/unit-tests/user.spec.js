@@ -24,12 +24,10 @@ describe('User-Service Test Suite', () => {
       let responseBox = {};
 
       beforeAll((done) => {
-        userService
-          .create(null, null, null, null, null, null, null, null)
-          .catch((error) => {
-            responseBox = error;
-            done();
-          });
+        userService.create(null, null, null, null, null, null, null, null).catch((error) => {
+          responseBox = error;
+          done();
+        });
       });
 
       it('should return error message', () => expect(responseBox.message).toBe('E-mail address is invalid'));
@@ -48,7 +46,7 @@ describe('User-Service Test Suite', () => {
             account.gender,
             account.address,
             account.jobRole,
-            account.department,
+            account.department
           )
           .then((result) => {
             responseBox = result;
@@ -94,7 +92,16 @@ describe('User-Service Test Suite', () => {
 
       beforeAll((done) => {
         userService
-          .create(account.firstName, account.lastName, email, '', account.gender, account.address, account.jobRole, account.department)
+          .create(
+            account.firstName,
+            account.lastName,
+            email,
+            '',
+            account.gender,
+            account.address,
+            account.jobRole,
+            account.department
+          )
           .catch((error) => {
             responseBox = error;
             done();
@@ -117,7 +124,7 @@ describe('User-Service Test Suite', () => {
             null,
             account.address,
             null,
-            null,
+            null
           )
           .catch((error) => {
             responseBox = error;
@@ -133,7 +140,16 @@ describe('User-Service Test Suite', () => {
 
       beforeAll((done) => {
         userService
-          .create(account.firstName, account.lastName, email, account.password, account.gender, account.address, 'enjoyment-officer', null)
+          .create(
+            account.firstName,
+            account.lastName,
+            email,
+            account.password,
+            account.gender,
+            account.address,
+            'enjoyment-officer',
+            null
+          )
           .catch((error) => {
             responseBox = error;
             done();
@@ -148,7 +164,16 @@ describe('User-Service Test Suite', () => {
 
       beforeAll((done) => {
         userService
-          .create(account.firstName, account.lastName, email, account.password, account.gender, account.address, account.jobRole, 'enjoyment-dept')
+          .create(
+            account.firstName,
+            account.lastName,
+            email,
+            account.password,
+            account.gender,
+            account.address,
+            account.jobRole,
+            'enjoyment-dept'
+          )
           .catch((error) => {
             responseBox = error;
             done();
@@ -210,10 +235,10 @@ describe('User-Service Test Suite', () => {
       });
 
       it('should return the same e-mail', () => expect(responseBox.email).toBe(account.email));
-      it('should return the user\'s first-name', () => expect(responseBox.first_name).toBe(account.firstName));
-      it('should return the user\'s last-name', () => expect(responseBox.last_name).toBe(account.lastName));
+      it("should return the user's first-name", () => expect(responseBox.first_name).toBe(account.firstName));
+      it("should return the user's last-name", () => expect(responseBox.last_name).toBe(account.lastName));
       it('should return the user-id', () => expect(responseBox.id).toBeDefined());
-      it('should return the user\'s password', () => expect(responseBox.password).toBeDefined());
+      it("should return the user's password-hash", () => expect(responseBox.password).toBeDefined());
     });
   });
 

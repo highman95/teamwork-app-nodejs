@@ -9,14 +9,23 @@ module.exports = {
 
     try {
       const user = await model.create(
-        firstName, lastName, email, password, gender, address, jobRole, department,
+        firstName,
+        lastName,
+        email,
+        password,
+        gender,
+        address,
+        jobRole,
+        department
       );
       const token = generateToken(user);
 
       res.status(201).json({
         status: 'success',
         data: {
-          message: 'User account successfully created', token, userId: user.id,
+          message: 'User account successfully created',
+          token,
+          userId: user.id,
         },
       });
     } catch (e) {
@@ -34,7 +43,9 @@ module.exports = {
       res.status(200).json({
         status: 'success',
         data: {
-          token, userId: user.id, firstName: user.first_name,
+          token,
+          userId: user.id,
+          firstName: user.first_name,
         },
       });
     } catch (e) {

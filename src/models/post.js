@@ -1,4 +1,9 @@
 module.exports = {
+  types: {
+    GIF_POST: 1,
+    ARTICLE_POST: 2,
+  },
+
   async create(postTypeId, title, content, imageUrl, userId) {
     if (!title) throw new Error('Title is missing');// 400
     if (!userId) throw new Error('User identifier is missing');// 400

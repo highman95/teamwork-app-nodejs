@@ -3,7 +3,10 @@ const modelComment = require('../models/comment');
 
 module.exports = {
   createPost: async (req, res, next) => {
-    const { body: { title, article }, userId } = req;
+    const {
+      body: { title, article },
+      userId,
+    } = req;
 
     try {
       const post = await modelPost.create(title, article, userId);
@@ -12,7 +15,10 @@ module.exports = {
       res.status(201).json({
         status: 'success',
         data: {
-          message: 'Article successfully posted', articleId, title, createdOn,
+          message: 'Article successfully posted',
+          articleId,
+          title,
+          createdOn,
         },
       });
     } catch (e) {
@@ -21,16 +27,20 @@ module.exports = {
   },
 
   /**
-     * Register a comment for a single article post
-     *
-     * @author Emma Nwamaife
-     *
-     * @param req The httpRequest Object
-     * @param res The httpResponse object
-     * @returns The httpResponse object
-     */
+   * Register a comment for a single article post
+   *
+   * @author Emma Nwamaife
+   *
+   * @param req The httpRequest Object
+   * @param res The httpResponse object
+   * @returns The httpResponse object
+   */
   createPostComment: async (req, res, next) => {
-    const { params: { articleId }, body: { comment }, userId } = req;
+    const {
+      params: { articleId },
+      body: { comment },
+      userId,
+    } = req;
 
     try {
       const post = await modelPost.find(articleId);
@@ -42,7 +52,11 @@ module.exports = {
       res.status(201).json({
         status: 'success',
         data: {
-          message: 'Comment successfully created', createdOn, articleTitle, article, comment,
+          message: 'Comment successfully created',
+          createdOn,
+          articleTitle,
+          article,
+          comment,
         },
       });
     } catch (e) {
@@ -51,7 +65,10 @@ module.exports = {
   },
 
   updatePost: async (req, res, next) => {
-    const { params: { articleId }, body: { title, article } } = req;
+    const {
+      params: { articleId },
+      body: { title, article },
+    } = req;
 
     try {
       const post = await modelPost.find(articleId);
@@ -60,7 +77,9 @@ module.exports = {
       res.status(200).json({
         status: 'success',
         data: {
-          message: 'Article successfully updated', title, article,
+          message: 'Article successfully updated',
+          title,
+          article,
         },
       });
     } catch (e) {
@@ -69,15 +88,19 @@ module.exports = {
   },
 
   getPost: async (req, res, next) => {
-    const { params: { articleId } } = req;
+    const {
+      params: { articleId },
+    } = req;
 
     try {
       const post = await modelPost.find(articleId);
       let comments = await modelComment.fetchAll(post.id);
 
-      comments = comments.map(({ id: commentId, comment, user_id: authorId }) => (
-        { commentId, comment, authorId }
-      ));
+      comments = comments.map(({ id: commentId, comment, user_id: authorId }) => ({
+        commentId,
+        comment,
+        authorId,
+      }));
       const {
         id, title, content: article, created_at: createdOn,
       } = post;
@@ -85,7 +108,11 @@ module.exports = {
       res.status(200).json({
         status: 'success',
         data: {
-          id, createdOn, title, article, comments,
+          id,
+          createdOn,
+          title,
+          article,
+          comments,
         },
       });
     } catch (e) {
@@ -94,7 +121,9 @@ module.exports = {
   },
 
   deletePost: async (req, res, next) => {
-    const { params: { articleId } } = req;
+    const {
+      params: { articleId },
+    } = req;
 
     try {
       await modelPost.delete(articleId);

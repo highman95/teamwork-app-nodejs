@@ -10,11 +10,20 @@ module.exports = {
 
       feeds = feeds.map((feed) => {
         const {
-          id, title, content: article, image_url: url, post_type_id: postTypeId,
-          user_id: authorId, created_at: createdOn,
+          id,
+          title,
+          content: article,
+          image_url: url,
+          post_type_id: postTypeId,
+          user_id: authorId,
+          created_at: createdOn,
         } = feed;
         return {
-          id, createdOn, title, ...(postTypeId === 1 ? { url } : { article }), authorId,
+          id,
+          createdOn,
+          title,
+          ...(postTypeId === 1 ? { url } : { article }),
+          authorId,
         };
       });
 

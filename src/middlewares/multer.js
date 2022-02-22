@@ -8,7 +8,7 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  const isGif = (file.mimetype === 'image/gif');
+  const isGif = file.mimetype === 'image/gif';
   cb(isGif ? null : new Error('Only GIF images are acceptable'), isGif);
 };
 

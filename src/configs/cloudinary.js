@@ -6,7 +6,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-
 module.exports = {
   uploadImage: async (file, callBack) => {
     const options = { resource_type: 'image', folder: 'capstone-project/images/' };

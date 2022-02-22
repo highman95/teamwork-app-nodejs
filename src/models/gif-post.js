@@ -1,8 +1,6 @@
 const mediaManager = require('../configs/cloudinary');
 const modelPost = require('./post');
 
-const postTypeId = 1;
-
 module.exports = {
   create: async (title, imageFile, userId) => {
     if (!imageFile || !imageFile.path || !imageFile.path.trim()) {
@@ -20,10 +18,16 @@ module.exports = {
       throw new Error('GIF image could not uploaded (Cloud)'); // 500
     }
 
-    return modelPost.create(postTypeId, title, null, response.url, userId);
+    return modelPost.create(
+      modelPost.types.GIF_POST,
+      title,
+      null,
+      response.url,
+      userId
+    );
   },
 
-  delete: async (id) => modelPost.delete(postTypeId, id),
+  delete: async (id) => modelPost.delete(modelPost.types.GIF_POST, id),
 
-  find: async (id) => modelPost.find(postTypeId, id),
+  find: async (id) => modelPost.find(modelPost.types.GIF_POST, id),
 };
