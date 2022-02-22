@@ -4,16 +4,12 @@ const departmentService = require('../../src/models/department');
 describe('Department-Service Test Suite', () => {
   describe('Find Department', () => {
     describe('Name is not specified', () => {
-      let responseBox = {};
-
-      beforeAll((done) => {
+      it('should return error message', (done) => {
         departmentService.findByName(null).catch((error) => {
-          responseBox = error;
+          expect(error.message).toBe('Department cannot be empty');
           done();
         });
       });
-
-      it('should return error message', () => expect(responseBox.message).toBe('Department cannot be empty'));
     });
   });
 });

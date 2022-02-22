@@ -21,16 +21,12 @@ describe('User-Service Test Suite', () => {
     });
 
     describe('E-mail is not specified', () => {
-      let responseBox = {};
-
-      beforeAll((done) => {
+      it('should return error message', (done) => {
         userService.create(null, null, null, null, null, null, null, null).catch((error) => {
-          responseBox = error;
+          expect(error.message).toBe('E-mail address is invalid');
           done();
         });
       });
-
-      it('should return error message', () => expect(responseBox.message).toBe('E-mail address is invalid'));
     });
 
     describe('User-details are valid/correct', () => {
@@ -58,39 +54,29 @@ describe('User-Service Test Suite', () => {
     });
 
     describe('First-name is not specified', () => {
-      let responseBox = {};
-
-      beforeAll((done) => {
+      it('should return error message', (done) => {
         userService
           .create(null, account.lastName, email, null, null, null, null, null)
           .catch((error) => {
-            responseBox = error;
+            expect(error.message).toBe('FirstName cannot be empty (required)');
             done();
           });
       });
-
-      it('should return error message', () => expect(responseBox.message).toBe('FirstName cannot be empty (required)'));
     });
 
     describe('Last-name is not specified', () => {
-      let responseBox = {};
-
-      beforeAll((done) => {
+      it('should return error message', (done) => {
         userService
           .create(account.firstName, null, email, null, null, null, null, null)
           .catch((error) => {
-            responseBox = error;
+            expect(error.message).toBe('LastName cannot be empty (required)');
             done();
           });
       });
-
-      it('should return error message', () => expect(responseBox.message).toBe('LastName cannot be empty (required)'));
     });
 
     describe('Password is not specified', () => {
-      let responseBox = {};
-
-      beforeAll((done) => {
+      it('should return error message', (done) => {
         userService
           .create(
             account.firstName,
@@ -103,18 +89,14 @@ describe('User-Service Test Suite', () => {
             account.department
           )
           .catch((error) => {
-            responseBox = error;
+            expect(error.message).toBe('Password cannot be empty (required)');
             done();
           });
       });
-
-      it('should return error message', () => expect(responseBox.message).toBe('Password cannot be empty (required)'));
     });
 
     describe('Gender is not specified', () => {
-      let responseBox = {};
-
-      beforeAll((done) => {
+      it('should return error message', (done) => {
         userService
           .create(
             account.firstName,
@@ -127,18 +109,14 @@ describe('User-Service Test Suite', () => {
             null
           )
           .catch((error) => {
-            responseBox = error;
+            expect(error.message).toBe('Gender cannot be empty (required)');
             done();
           });
       });
-
-      it('should return error message', () => expect(responseBox.message).toBe('Gender cannot be empty (required)'));
     });
 
     describe('Role is not valid', () => {
-      let responseBox = {};
-
-      beforeAll((done) => {
+      it('should return error message', (done) => {
         userService
           .create(
             account.firstName,
@@ -151,18 +129,14 @@ describe('User-Service Test Suite', () => {
             null
           )
           .catch((error) => {
-            responseBox = error;
+            expect(error.message).toBe('Role does not exist');
             done();
           });
       });
-
-      it('should return error message', () => expect(responseBox.message).toBe('Role does not exist'));
     });
 
     describe('Department is not valid', () => {
-      let responseBox = {};
-
-      beforeAll((done) => {
+      it('should return error message', (done) => {
         userService
           .create(
             account.firstName,
@@ -175,53 +149,39 @@ describe('User-Service Test Suite', () => {
             'enjoyment-dept'
           )
           .catch((error) => {
-            responseBox = error;
+            expect(error.message).toBe('Department does not exist');
             done();
           });
       });
-
-      it('should return error message', () => expect(responseBox.message).toBe('Department does not exist'));
     });
   });
 
   describe('Authenticate User', () => {
     describe('Password is not specified', () => {
-      let responseBox = {};
-
-      beforeAll((done) => {
+      it('should return error message', (done) => {
         userService.authenticate(null, null).catch((error) => {
-          responseBox = error;
+          expect(error.message).toBe('Password cannot be blank');
           done();
         });
       });
-
-      it('should return error message', () => expect(responseBox.message).toBe('Password cannot be blank'));
     });
 
     describe('Username/E-mail is not specified', () => {
-      let responseBox = {};
-
-      beforeAll((done) => {
+      it('should return error message', (done) => {
         userService.authenticate(null, 'passw3rd').catch((error) => {
-          responseBox = error;
+          expect(error.message).toBe('Invalid e-mail / password');
           done();
         });
       });
-
-      it('should return error message', () => expect(responseBox.message).toBe('Invalid e-mail / password'));
     });
 
     describe('Password is incorrect', () => {
-      let responseBox = {};
-
-      beforeAll((done) => {
+      it('should return error message', (done) => {
         userService.authenticate(account.email, `${account.password}12`).catch((error) => {
-          responseBox = error;
+          expect(error.message).toBe('Invalid e-mail / password');
           done();
         });
       });
-
-      it('should return error message', () => expect(responseBox.message).toBe('Invalid e-mail / password'));
     });
 
     describe('Valid credentials are specified', () => {
@@ -244,29 +204,21 @@ describe('User-Service Test Suite', () => {
 
   describe('Find User By E-mail', () => {
     describe('E-mail is not valid', () => {
-      let responseBox = {};
-
-      beforeAll((done) => {
+      it('should return error message', (done) => {
         userService.findByEmail('geek@').catch((error) => {
-          responseBox = error;
+          expect(error.message).toBe('E-mail address is invalid');
           done();
         });
       });
-
-      it('should return error message', () => expect(responseBox.message).toBe('E-mail address is invalid'));
     });
 
     describe('E-mail is not registered', () => {
-      let responseBox = {};
-
-      beforeAll((done) => {
+      it('should return empty-object', (done) => {
         userService.findByEmail(`geek-${Date.now()}@getnada.com`).then((result) => {
-          responseBox = result;
+          expect(result).toEqual({});
           done();
         });
       });
-
-      it('should return empty-object', () => expect(responseBox).toEqual({}));
     });
 
     describe('E-mail is valid/registered', () => {

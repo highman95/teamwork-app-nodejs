@@ -4,16 +4,12 @@ const roleService = require('../../src/models/role');
 describe('Role-Service Test Suite', () => {
   describe('Find Role', () => {
     describe('Name is not specified', () => {
-      let responseBox = {};
-
-      beforeAll((done) => {
+      it('should return error message', (done) => {
         roleService.findByName(null).catch((error) => {
-          responseBox = error;
+          expect(error.message).toBe('Role cannot be empty');
           done();
         });
       });
-
-      it('should return error message', () => expect(responseBox.message).toBe('Role cannot be empty'));
     });
   });
 });
