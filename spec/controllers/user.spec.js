@@ -5,23 +5,26 @@ const { generateToken, verifyToken } = require('../../src/utils/security');
 
 describe('UserController Test Suite', () => {
   let baseUrl;
-  let testCredentialsX = {};
+  const testData = {
+    firstName: 'Mark',
+    lastName: 'Spencer',
+    email: `mark.spencer-${Date.now()}@oc.com`,
+    password: 'markspencer',
+    gender: 'male',
+    address: '',
+    jobRole: 'staff',
+    department: 'Engineering',
+  };
 
   beforeAll(() => {
     const { address, port } = server.address();
     const hostName = address === '::' ? `http://localhost:${port}` : address;
     baseUrl = `${hostName}/api/v1/auth`;
-
-    testCredentialsX = {
-      email: `mark.spencer-${Date.now()}@oc.com`,
-      password: 'markspencer',
-    };
   });
 
   afterAll((done) => server.close(done));
 
   describe('POST /auth/create-user', () => {
-    let testData = {};
     let options = {};
 
     beforeAll(() => {
@@ -29,35 +32,18 @@ describe('UserController Test Suite', () => {
       options = { headers: { token: generateToken({ id: 1 }) } };
     });
 
-    beforeEach(() => {
-      const data = {
-        firstName: 'Mark',
-        lastName: 'Spencer',
-        ...testCredentialsX,
-        gender: 'male',
-        address: '',
-        jobRole: 'staff',
-        department: 'Engineering',
-      };
-
-      testData = { ...data };
-    });
-
     describe('Role is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
-        testData.jobRole = '';
-
         request.post(
           {
             url: endPoint,
             ...options,
-            form: testData,
+            form: { ...testData, jobRole: '' },
             json: true,
           },
           (error, response, body) => {
-            // console.log('----test-data-r=', testData, body.error);
             responseBox = { error, response, body };
             done();
           }
@@ -66,24 +52,21 @@ describe('UserController Test Suite', () => {
 
       it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
       it('should return error status', () => expect(responseBox.body.status).toBe('error'));
-      it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
+      it('should return a relevant error message', () => expect(responseBox.body.error).toBe('Role cannot be empty'));
     });
 
     describe('Department is not specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
-        testData.department = '';
-
         request.post(
           {
             url: endPoint,
             ...options,
-            form: testData,
+            form: { ...testData, department: '' },
             json: true,
           },
           (error, response, body) => {
-            // console.log('----test-data-d=', testData, body.error);
             responseBox = { error, response, body };
             done();
           }
@@ -92,20 +75,18 @@ describe('UserController Test Suite', () => {
 
       it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
       it('should return error status', () => expect(responseBox.body.status).toBe('error'));
-      it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
+      it('should return a relevant error message', () => expect(responseBox.body.error).toBe('Department cannot be empty'));
     });
 
     describe('A non-existing role is specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
-        testData.jobRole = 'xyz';
-
         request.post(
           {
             url: endPoint,
             ...options,
-            form: testData,
+            form: { ...testData, jobRole: 'xyz' },
             json: true,
           },
           (error, response, body) => {
@@ -117,20 +98,18 @@ describe('UserController Test Suite', () => {
 
       it('should return statusCode 404', () => expect(responseBox.response.statusCode).toBe(404));
       it('should return error status', () => expect(responseBox.body.status).toBe('error'));
-      it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
+      it('should return a relevant error message', () => expect(responseBox.body.error).toBe('Role does not exist'));
     });
 
     describe('A non-existing department is specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
-        testData.department = 'xyz';
-
         request.post(
           {
             url: endPoint,
             ...options,
-            form: testData,
+            form: { ...testData, department: 'xyz' },
             json: true,
           },
           (error, response, body) => {
@@ -142,7 +121,7 @@ describe('UserController Test Suite', () => {
 
       it('should return statusCode 404', () => expect(responseBox.response.statusCode).toBe(404));
       it('should return error status', () => expect(responseBox.body.status).toBe('error'));
-      it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
+      it('should return a relevant error message', () => expect(responseBox.body.error).toBe('Department does not exist'));
     });
 
     describe('All required parameters are sent', () => {
@@ -157,7 +136,6 @@ describe('UserController Test Suite', () => {
             json: true,
           },
           (error, response, body) => {
-            // console.log('----test-dataD=', testData, body.error);
             responseBox = { error, response, body };
             done();
           }
@@ -184,65 +162,86 @@ describe('UserController Test Suite', () => {
   });
 
   describe('POST /auth/signin', () => {
-    let testCredentials = {};
+    const testCredentials = { email: testData.email, password: testData.password };
 
     beforeAll(() => {
       endPoint = `${baseUrl}/signin`;
-    });
-
-    beforeEach(() => {
-      testCredentials = { ...testCredentialsX };
     });
 
     describe('E-mail input is blank', () => {
       let responseBox;
 
       beforeAll((done) => {
-        testCredentials.email = '';
-
-        request.post(endPoint, { form: testCredentials, json: true }, (error, response, body) => {
-          responseBox = { error, response, body };
-          done();
-        });
+        request.post(
+          endPoint,
+          { form: { ...testCredentials, email: '' }, json: true },
+          (error, response, body) => {
+            responseBox = { error, response, body };
+            done();
+          }
+        );
       });
 
       it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
       it('should return error status', () => expect(responseBox.body.status).toBe('error'));
-      it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
+      it('should return a relevant error message', () => expect(responseBox.body.error).toBe('Invalid e-mail / password'));
     });
 
     describe('An invalid email is supplied', () => {
       let responseBox;
 
       beforeAll((done) => {
-        testCredentials.email = 'i-do-code@me.com';
-
-        request.post(endPoint, { form: testCredentials, json: true }, (error, response, body) => {
-          responseBox = { error, response, body };
-          done();
-        });
+        request.post(
+          endPoint,
+          { form: { ...testCredentials, email: 'i-do-code@me.com' }, json: true },
+          (error, response, body) => {
+            responseBox = { error, response, body };
+            done();
+          }
+        );
       });
 
       it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
       it('should return error status', () => expect(responseBox.body.status).toBe('error'));
-      it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
+      it('should return a relevant error message', () => expect(responseBox.body.error).toBe('Invalid e-mail / password'));
     });
 
-    describe('Blank(invalid) password is supplied', () => {
+    describe('Blank password is supplied', () => {
       let responseBox;
 
       beforeAll((done) => {
-        testCredentials.password = '';
-
-        request.post(endPoint, { form: testCredentials, json: true }, (error, response, body) => {
-          responseBox = { error, response, body };
-          done();
-        });
+        request.post(
+          endPoint,
+          { form: { ...testCredentials, password: '' }, json: true },
+          (error, response, body) => {
+            responseBox = { error, response, body };
+            done();
+          }
+        );
       });
 
       it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
       it('should return error status', () => expect(responseBox.body.status).toBe('error'));
-      it('should return a relevant error message', () => expect(responseBox.body.error).toBeDefined());
+      it('should return a relevant error message', () => expect(responseBox.body.error).toBe('Password cannot be blank'));
+    });
+
+    describe('Incorrect password is supplied', () => {
+      let responseBox;
+
+      beforeAll((done) => {
+        request.post(
+          endPoint,
+          { form: { ...testCredentials, password: `${testData.password}-xyz` }, json: true },
+          (error, response, body) => {
+            responseBox = { error, response, body };
+            done();
+          }
+        );
+      });
+
+      it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
+      it('should return error status', () => expect(responseBox.body.status).toBe('error'));
+      it('should return a relevant error message', () => expect(responseBox.body.error).toBe('Invalid e-mail / password'));
     });
 
     describe('Valid credentials are supplied', () => {
