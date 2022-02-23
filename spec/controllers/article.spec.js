@@ -36,12 +36,18 @@ describe('ArticleController Test Suite', () => {
       beforeAll((done) => {
         testData.title = '';
 
-        request.post({
-          url: endPoint, ...options, form: testData, json: true,
-        }, (error, response, body) => {
-          responseBox = { response, body };
-          done();
-        });
+        request.post(
+          {
+            url: endPoint,
+            ...options,
+            form: testData,
+            json: true,
+          },
+          (error, response, body) => {
+            responseBox = { response, body };
+            done();
+          }
+        );
       });
 
       it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
@@ -55,12 +61,18 @@ describe('ArticleController Test Suite', () => {
       beforeAll((done) => {
         testData.article = '';
 
-        request.post({
-          url: endPoint, ...options, form: testData, json: true,
-        }, (error, response, body) => {
-          responseBox = { response, body };
-          done();
-        });
+        request.post(
+          {
+            url: endPoint,
+            ...options,
+            form: testData,
+            json: true,
+          },
+          (error, response, body) => {
+            responseBox = { response, body };
+            done();
+          }
+        );
       });
 
       it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
@@ -72,24 +84,29 @@ describe('ArticleController Test Suite', () => {
       let responseBox = {};
 
       beforeAll((done) => {
-        request.post({
-          url: endPoint, ...options, form: testData, json: true,
-        }, (error, response, body) => {
-          responseBox = { response, body };
-          articleId = responseBox.body.data.articleId;// set the test article-id
-          done();
-        });
+        request.post(
+          {
+            url: endPoint,
+            ...options,
+            form: testData,
+            json: true,
+          },
+          (error, response, body) => {
+            responseBox = { response, body };
+            articleId = responseBox.body.data.articleId; // set the test article-id
+            done();
+          }
+        );
       });
 
       it('should return statusCode 201', () => expect(responseBox.response.statusCode).toBe(201));
       it('should return success status', () => expect(responseBox.body.status).toBe('success'));
       it('should return a success message', () => expect(responseBox.body.data.message).toBeDefined());
       it('should return the same title', () => expect(testData.title === responseBox.body.data.title).toBeTruthy());
-      it('should return the article\'s id', () => expect(responseBox.body.data.articleId).toBeDefined());
+      it("should return the article's id", () => expect(responseBox.body.data.articleId).toBeDefined());
       it('should return the time-created', () => expect(responseBox.body.data.createdOn).toBeDefined());
     });
   });
-
 
   describe('GET /articles/:articleId', () => {
     describe('Invalid articleId is specified', () => {
@@ -111,20 +128,22 @@ describe('ArticleController Test Suite', () => {
       let responseBox = {};
 
       beforeAll((done) => {
-        request.get({ url: `${endPoint}/${articleId}`, ...options, json: true }, (error, response, body) => {
-          responseBox = { response, body };
-          done();
-        });
+        request.get(
+          { url: `${endPoint}/${articleId}`, ...options, json: true },
+          (error, response, body) => {
+            responseBox = { response, body };
+            done();
+          }
+        );
       });
 
       it('should return statusCode 200', () => expect(responseBox.response.statusCode).toBe(200));
       it('should return success status', () => expect(responseBox.body.status).toBe('success'));
-      it('should return the article\'s title', () => expect(responseBox.body.data.title).toBeDefined());
-      it('should return the article\'s comments', () => expect(responseBox.body.data.comments).toBeDefined());
+      it("should return the article's title", () => expect(responseBox.body.data.title).toBeDefined());
+      it("should return the article's comments", () => expect(responseBox.body.data.comments).toBeDefined());
       it('should return the time-created', () => expect(responseBox.body.data.createdOn).toBeDefined());
     });
   });
-
 
   describe('POST /articles/:articleId/comment', () => {
     let testData = {};
@@ -140,12 +159,18 @@ describe('ArticleController Test Suite', () => {
       beforeAll((done) => {
         testData.comment = '';
 
-        request.post({
-          url: `${endPoint}/${articleId}/comment`, ...options, form: testData, json: true,
-        }, (error, response, body) => {
-          responseBox = { response, body };
-          done();
-        });
+        request.post(
+          {
+            url: `${endPoint}/${articleId}/comment`,
+            ...options,
+            form: testData,
+            json: true,
+          },
+          (error, response, body) => {
+            responseBox = { response, body };
+            done();
+          }
+        );
       });
 
       it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
@@ -157,33 +182,41 @@ describe('ArticleController Test Suite', () => {
       let responseBox = {};
 
       beforeAll((done) => {
-        request.post({
-          url: `${endPoint}/${articleId}/comment`, ...options, form: testData, json: true,
-        }, (error, response, body) => {
-          responseBox = { response, body };
-          done();
-        });
+        request.post(
+          {
+            url: `${endPoint}/${articleId}/comment`,
+            ...options,
+            form: testData,
+            json: true,
+          },
+          (error, response, body) => {
+            responseBox = { response, body };
+            done();
+          }
+        );
       });
 
       it('should return statusCode 201', () => expect(responseBox.response.statusCode).toBe(201));
       it('should return success status', () => expect(responseBox.body.status).toBe('success'));
       it('should return a success message', () => expect(responseBox.body.data.message).toBeDefined());
       it('should return the same comment', () => expect(testData.comment === responseBox.body.data.comment).toBeTruthy());
-      it('should return the article post\'s title', () => expect(responseBox.body.data.articleTitle).toBeDefined());
+      it("should return the article post's title", () => expect(responseBox.body.data.articleTitle).toBeDefined());
       it('should return the time-created', () => expect(responseBox.body.data.createdOn).toBeDefined());
     });
   });
-
 
   describe('DELETE /articles/:articleId', () => {
     describe('Article-id is specified', () => {
       let responseBox = {};
 
       beforeAll((done) => {
-        request.delete({ url: `${endPoint}/${articleId}`, ...options, json: true }, (error, response, body) => {
-          responseBox = { response, body };
-          done();
-        });
+        request.delete(
+          { url: `${endPoint}/${articleId}`, ...options, json: true },
+          (error, response, body) => {
+            responseBox = { response, body };
+            done();
+          }
+        );
       });
 
       it('should return statusCode 200', () => expect(responseBox.response.statusCode).toBe(200));

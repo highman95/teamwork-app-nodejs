@@ -49,13 +49,19 @@ describe('UserController Test Suite', () => {
       beforeAll((done) => {
         testData.jobRole = '';
 
-        request.post({
-          url: endPoint, ...options, form: testData, json: true,
-        }, (error, response, body) => {
-          // console.log('----test-data-r=', testData, body.error);
-          responseBox = { error, response, body };
-          done();
-        });
+        request.post(
+          {
+            url: endPoint,
+            ...options,
+            form: testData,
+            json: true,
+          },
+          (error, response, body) => {
+            // console.log('----test-data-r=', testData, body.error);
+            responseBox = { error, response, body };
+            done();
+          }
+        );
       });
 
       it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
@@ -69,13 +75,19 @@ describe('UserController Test Suite', () => {
       beforeAll((done) => {
         testData.department = '';
 
-        request.post({
-          url: endPoint, ...options, form: testData, json: true,
-        }, (error, response, body) => {
-          // console.log('----test-data-d=', testData, body.error);
-          responseBox = { error, response, body };
-          done();
-        });
+        request.post(
+          {
+            url: endPoint,
+            ...options,
+            form: testData,
+            json: true,
+          },
+          (error, response, body) => {
+            // console.log('----test-data-d=', testData, body.error);
+            responseBox = { error, response, body };
+            done();
+          }
+        );
       });
 
       it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
@@ -89,12 +101,18 @@ describe('UserController Test Suite', () => {
       beforeAll((done) => {
         testData.jobRole = 'xyz';
 
-        request.post({
-          url: endPoint, ...options, form: testData, json: true,
-        }, (error, response, body) => {
-          responseBox = { error, response, body };
-          done();
-        });
+        request.post(
+          {
+            url: endPoint,
+            ...options,
+            form: testData,
+            json: true,
+          },
+          (error, response, body) => {
+            responseBox = { error, response, body };
+            done();
+          }
+        );
       });
 
       it('should return statusCode 404', () => expect(responseBox.response.statusCode).toBe(404));
@@ -108,12 +126,18 @@ describe('UserController Test Suite', () => {
       beforeAll((done) => {
         testData.department = 'xyz';
 
-        request.post({
-          url: endPoint, ...options, form: testData, json: true,
-        }, (error, response, body) => {
-          responseBox = { error, response, body };
-          done();
-        });
+        request.post(
+          {
+            url: endPoint,
+            ...options,
+            form: testData,
+            json: true,
+          },
+          (error, response, body) => {
+            responseBox = { error, response, body };
+            done();
+          }
+        );
       });
 
       it('should return statusCode 404', () => expect(responseBox.response.statusCode).toBe(404));
@@ -125,24 +149,31 @@ describe('UserController Test Suite', () => {
       let responseBox = {};
 
       beforeAll((done) => {
-        request.post({
-          url: endPoint, ...options, form: testData, json: true,
-        }, (error, response, body) => {
-          // console.log('----test-dataD=', testData, body.error);
-          responseBox = { error, response, body };
-          done();
-        });
+        request.post(
+          {
+            url: endPoint,
+            ...options,
+            form: testData,
+            json: true,
+          },
+          (error, response, body) => {
+            // console.log('----test-dataD=', testData, body.error);
+            responseBox = { error, response, body };
+            done();
+          }
+        );
       });
 
       it('should return statusCode 201', () => expect(responseBox.response.statusCode).toBe(201));
       it('should return success status', () => expect(responseBox.body.status).toBe('success'));
       it('should return success message', () => expect(responseBox.body.data.message).toBeDefined());
       it('should return an authentication token', () => expect(responseBox.body.data.token).toBeDefined());
-      it('should return the new user\'s valid unique-identifier', () => { // verify token with expected value
+      it("should return the new user's valid unique-identifier", () => {
+        // verify token with expected value
         let isValidNewUser;
         try {
           const decodedToken = verifyToken(responseBox.body.data.token);
-          isValidNewUser = (decodedToken.userId === responseBox.body.data.userId);
+          isValidNewUser = decodedToken.userId === responseBox.body.data.userId;
         } catch (e) {
           isValidNewUser = false;
         }
@@ -224,15 +255,15 @@ describe('UserController Test Suite', () => {
         });
       });
 
-
       it('should return statusCode 200', () => expect(responseBox.response.statusCode).toBe(200));
       it('should return success status', () => expect(responseBox.body.status).toBe('success'));
       it('should return an authentication token', () => expect(responseBox.body.data.token).toBeDefined());
-      it('should return a valid user-id', () => { // verify token with expected value
+      it('should return a valid user-id', () => {
+        // verify token with expected value
         let isValidUser;
         try {
           const decodedToken = verifyToken(responseBox.body.data.token);
-          isValidUser = (decodedToken.userId === responseBox.body.data.userId);
+          isValidUser = decodedToken.userId === responseBox.body.data.userId;
         } catch (e) {
           isValidUser = false;
         }
