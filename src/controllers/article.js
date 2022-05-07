@@ -96,14 +96,14 @@ module.exports = {
       const post = await modelPost.find(articleId);
       let comments = await modelComment.fetchAll(post.id);
 
-      comments = comments.map(({ id: commentId, comment, user_id: authorId }) => ({
-        commentId,
-        comment,
-        authorId,
-      }));
-      const {
-        id, title, content: article, created_at: createdOn,
-      } = post;
+      comments = comments.map(
+        ({ id: commentId, comment, user_id: authorId }) => ({
+          commentId,
+          comment,
+          authorId,
+        })
+      );
+      const { id, title, content: article, created_at: createdOn } = post;
 
       res.status(200).json({
         status: 'success',

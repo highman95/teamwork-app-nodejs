@@ -22,10 +22,12 @@ describe('User-Service Test Suite', () => {
 
     describe('E-mail is not specified', () => {
       it('should return error message', (done) => {
-        userService.create(null, null, null, null, null, null, null, null).catch((error) => {
-          expect(error.message).toBe('E-mail address is invalid');
-          done();
-        });
+        userService
+          .create(null, null, null, null, null, null, null, null)
+          .catch((error) => {
+            expect(error.message).toBe('E-mail address is invalid');
+            done();
+          });
       });
     });
 
@@ -50,7 +52,8 @@ describe('User-Service Test Suite', () => {
           });
       });
 
-      it('should return the user-id', () => expect(responseBox.id).toBeDefined());
+      it('should return the user-id', () =>
+        expect(responseBox.id).toBeDefined());
     });
 
     describe('First-name is not specified', () => {
@@ -177,10 +180,12 @@ describe('User-Service Test Suite', () => {
 
     describe('Password is incorrect', () => {
       it('should return error message', (done) => {
-        userService.authenticate(account.email, `${account.password}12`).catch((error) => {
-          expect(error.message).toBe('Invalid e-mail / password');
-          done();
-        });
+        userService
+          .authenticate(account.email, `${account.password}12`)
+          .catch((error) => {
+            expect(error.message).toBe('Invalid e-mail / password');
+            done();
+          });
       });
     });
 
@@ -188,17 +193,24 @@ describe('User-Service Test Suite', () => {
       let responseBox = {};
 
       beforeAll((done) => {
-        userService.authenticate(account.email, account.password).then((result) => {
-          responseBox = result;
-          done();
-        });
+        userService
+          .authenticate(account.email, account.password)
+          .then((result) => {
+            responseBox = result;
+            done();
+          });
       });
 
-      it('should return the same e-mail', () => expect(responseBox.email).toBe(account.email));
-      it("should return the user's first-name", () => expect(responseBox.first_name).toBe(account.firstName));
-      it("should return the user's last-name", () => expect(responseBox.last_name).toBe(account.lastName));
-      it('should return the user-id', () => expect(responseBox.id).toBeDefined());
-      it("should return the user's password-hash", () => expect(responseBox.password).toBeDefined());
+      it('should return the same e-mail', () =>
+        expect(responseBox.email).toBe(account.email));
+      it("should return the user's first-name", () =>
+        expect(responseBox.first_name).toBe(account.firstName));
+      it("should return the user's last-name", () =>
+        expect(responseBox.last_name).toBe(account.lastName));
+      it('should return the user-id', () =>
+        expect(responseBox.id).toBeDefined());
+      it("should return the user's password-hash", () =>
+        expect(responseBox.password).toBeDefined());
     });
   });
 
@@ -214,10 +226,12 @@ describe('User-Service Test Suite', () => {
 
     describe('E-mail is not registered', () => {
       it('should return empty-object', (done) => {
-        userService.findByEmail(`geek-${Date.now()}@getnada.com`).then((result) => {
-          expect(result).toEqual({});
-          done();
-        });
+        userService
+          .findByEmail(`geek-${Date.now()}@getnada.com`)
+          .then((result) => {
+            expect(result).toEqual({});
+            done();
+          });
       });
     });
 
@@ -231,10 +245,14 @@ describe('User-Service Test Suite', () => {
         });
       });
 
-      it('should return same e-mail', () => expect(responseBox.email).toEqual(account.email));
-      it('should return the first-name', () => expect(responseBox.first_name).toEqual(account.firstName));
-      it('should return the last-name', () => expect(responseBox.last_name).toEqual(account.lastName));
-      it('should return the user-id', () => expect(responseBox.id).toBeDefined());
+      it('should return same e-mail', () =>
+        expect(responseBox.email).toEqual(account.email));
+      it('should return the first-name', () =>
+        expect(responseBox.first_name).toEqual(account.firstName));
+      it('should return the last-name', () =>
+        expect(responseBox.last_name).toEqual(account.lastName));
+      it('should return the user-id', () =>
+        expect(responseBox.id).toBeDefined());
     });
   });
 });

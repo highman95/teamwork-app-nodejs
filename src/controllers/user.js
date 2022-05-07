@@ -4,7 +4,14 @@ const { generateToken } = require('../utils/security');
 module.exports = {
   createOne: async (req, res, next) => {
     const {
-      firstName, lastName, email, password, gender, address, jobRole, department,
+      firstName,
+      lastName,
+      email,
+      password,
+      gender,
+      address,
+      jobRole,
+      department,
     } = req.body;
 
     try {

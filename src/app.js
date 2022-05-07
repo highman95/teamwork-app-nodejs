@@ -15,7 +15,10 @@ const corsHandler = (req, res, next) => {
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization, token'
   );
-  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST, GET, PUT, DELETE, PATCH');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'OPTIONS, POST, GET, PUT, DELETE, PATCH'
+  );
   next();
 };
 app.use(corsHandler);
@@ -37,17 +40,22 @@ const errorHandler = (err, req, res, next) => {
   // console.log(`${err.name || err.error.name} --- ${err.message || err.error.message}`);
 
   const isBRE = err.name === ReferenceError.name; // bad-reference error
-  const isTAE = ['token'].includes(err.message.toLowerCase())
-    && ['missing', 'invalid', 'expired'].includes(err.message);
+  const isTAE =
+    ['token'].includes(err.message.toLowerCase()) &&
+    ['missing', 'invalid', 'expired'].includes(err.message);
 
   // client-side (input) error
-  const isCSE = [EvalError.name, Error.name, RangeError.name].includes(err.name);
+  const isCSE = [EvalError.name, Error.name, RangeError.name].includes(
+    err.name
+  );
 
   // eslint-disable-next-line no-nested-ternary
-  res.status(err.statusCode || (isBRE ? 404 : isTAE ? 401 : isCSE ? 400 : 500)).send({
-    status: 'error',
-    error: err.message || err.error.message,
-  });
+  res
+    .status(err.statusCode || (isBRE ? 404 : isTAE ? 401 : isCSE ? 400 : 500))
+    .send({
+      status: 'error',
+      error: err.message || err.error.message,
+    });
 };
 
 app.use(express.static(path.join(__dirname, '../public')));

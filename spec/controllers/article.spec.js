@@ -42,9 +42,12 @@ describe('ArticleController Test Suite', () => {
         );
       });
 
-      it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
-      it('should return error status', () => expect(responseBox.body.status).toBe('error'));
-      it('should return a relevant error message', () => expect(responseBox.body.error).toBe('Title is missing'));
+      it('should return statusCode 400', () =>
+        expect(responseBox.response.statusCode).toBe(400));
+      it('should return error status', () =>
+        expect(responseBox.body.status).toBe('error'));
+      it('should return a relevant error message', () =>
+        expect(responseBox.body.error).toBe('Title is missing'));
     });
 
     describe('Article is not specified', () => {
@@ -65,9 +68,12 @@ describe('ArticleController Test Suite', () => {
         );
       });
 
-      it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
-      it('should return error status', () => expect(responseBox.body.status).toBe('error'));
-      it('should return a relevant error message', () => expect(responseBox.body.error).toBe('Content is missing'));
+      it('should return statusCode 400', () =>
+        expect(responseBox.response.statusCode).toBe(400));
+      it('should return error status', () =>
+        expect(responseBox.body.status).toBe('error'));
+      it('should return a relevant error message', () =>
+        expect(responseBox.body.error).toBe('Content is missing'));
     });
 
     describe('All required parameters are specified', () => {
@@ -89,12 +95,20 @@ describe('ArticleController Test Suite', () => {
         );
       });
 
-      it('should return statusCode 201', () => expect(responseBox.response.statusCode).toBe(201));
-      it('should return success status', () => expect(responseBox.body.status).toBe('success'));
-      it('should return a success message', () => expect(responseBox.body.data.message).toBe('Article successfully posted'));
-      it('should return the same title', () => expect(testData.title === responseBox.body.data.title).toBeTruthy());
-      it("should return the article's id", () => expect(responseBox.body.data.articleId).toBeDefined());
-      it('should return the time-created', () => expect(responseBox.body.data.createdOn).toBeDefined());
+      it('should return statusCode 201', () =>
+        expect(responseBox.response.statusCode).toBe(201));
+      it('should return success status', () =>
+        expect(responseBox.body.status).toBe('success'));
+      it('should return a success message', () =>
+        expect(responseBox.body.data.message).toBe(
+          'Article successfully posted'
+        ));
+      it('should return the same title', () =>
+        expect(testData.title === responseBox.body.data.title).toBeTruthy());
+      it("should return the article's id", () =>
+        expect(responseBox.body.data.articleId).toBeDefined());
+      it('should return the time-created', () =>
+        expect(responseBox.body.data.createdOn).toBeDefined());
     });
   });
 
@@ -103,15 +117,21 @@ describe('ArticleController Test Suite', () => {
       let responseBox = {};
 
       beforeAll((done) => {
-        request.get({ url: `${endPoint}/0`, ...options, json: true }, (error, response, body) => {
-          responseBox = { response, body };
-          done();
-        });
+        request.get(
+          { url: `${endPoint}/0`, ...options, json: true },
+          (error, response, body) => {
+            responseBox = { response, body };
+            done();
+          }
+        );
       });
 
-      it('should return statusCode 404', () => expect(responseBox.response.statusCode).toBe(404));
-      it('should return error status', () => expect(responseBox.body.status).toBe('error'));
-      it('should return a relevant error message', () => expect(responseBox.body.error).toBe('Post does not exist'));
+      it('should return statusCode 404', () =>
+        expect(responseBox.response.statusCode).toBe(404));
+      it('should return error status', () =>
+        expect(responseBox.body.status).toBe('error'));
+      it('should return a relevant error message', () =>
+        expect(responseBox.body.error).toBe('Post does not exist'));
     });
 
     describe('Valid articleId is specified', () => {
@@ -127,11 +147,16 @@ describe('ArticleController Test Suite', () => {
         );
       });
 
-      it('should return statusCode 200', () => expect(responseBox.response.statusCode).toBe(200));
-      it('should return success status', () => expect(responseBox.body.status).toBe('success'));
-      it("should return the article's title", () => expect(responseBox.body.data.title).toBeDefined());
-      it("should return the article's comments", () => expect(responseBox.body.data.comments).toBeDefined());
-      it('should return the time-created', () => expect(responseBox.body.data.createdOn).toBeDefined());
+      it('should return statusCode 200', () =>
+        expect(responseBox.response.statusCode).toBe(200));
+      it('should return success status', () =>
+        expect(responseBox.body.status).toBe('success'));
+      it("should return the article's title", () =>
+        expect(responseBox.body.data.title).toBeDefined());
+      it("should return the article's comments", () =>
+        expect(responseBox.body.data.comments).toBeDefined());
+      it('should return the time-created', () =>
+        expect(responseBox.body.data.createdOn).toBeDefined());
     });
   });
 
@@ -163,9 +188,12 @@ describe('ArticleController Test Suite', () => {
         );
       });
 
-      it('should return statusCode 400', () => expect(responseBox.response.statusCode).toBe(400));
-      it('should return error status', () => expect(responseBox.body.status).toBe('error'));
-      it('should return a relevant error message', () => expect(responseBox.body.error).toBe('Comment/statement is missing'));
+      it('should return statusCode 400', () =>
+        expect(responseBox.response.statusCode).toBe(400));
+      it('should return error status', () =>
+        expect(responseBox.body.status).toBe('error'));
+      it('should return a relevant error message', () =>
+        expect(responseBox.body.error).toBe('Comment/statement is missing'));
     });
 
     describe('Article comment is specified', () => {
@@ -186,12 +214,22 @@ describe('ArticleController Test Suite', () => {
         );
       });
 
-      it('should return statusCode 201', () => expect(responseBox.response.statusCode).toBe(201));
-      it('should return success status', () => expect(responseBox.body.status).toBe('success'));
-      it('should return a success message', () => expect(responseBox.body.data.message).toBe('Comment successfully created'));
-      it('should return the same comment', () => expect(testData.comment === responseBox.body.data.comment).toBeTruthy());
-      it("should return the article post's title", () => expect(responseBox.body.data.articleTitle).toBeDefined());
-      it('should return the time-created', () => expect(responseBox.body.data.createdOn).toBeDefined());
+      it('should return statusCode 201', () =>
+        expect(responseBox.response.statusCode).toBe(201));
+      it('should return success status', () =>
+        expect(responseBox.body.status).toBe('success'));
+      it('should return a success message', () =>
+        expect(responseBox.body.data.message).toBe(
+          'Comment successfully created'
+        ));
+      it('should return the same comment', () =>
+        expect(
+          testData.comment === responseBox.body.data.comment
+        ).toBeTruthy());
+      it("should return the article post's title", () =>
+        expect(responseBox.body.data.articleTitle).toBeDefined());
+      it('should return the time-created', () =>
+        expect(responseBox.body.data.createdOn).toBeDefined());
     });
   });
 
@@ -209,9 +247,14 @@ describe('ArticleController Test Suite', () => {
         );
       });
 
-      it('should return statusCode 200', () => expect(responseBox.response.statusCode).toBe(200));
-      it('should return success status', () => expect(responseBox.body.status).toBe('success'));
-      it('should return a success message', () => expect(responseBox.body.data.message).toBe('Article successfully deleted'));
+      it('should return statusCode 200', () =>
+        expect(responseBox.response.statusCode).toBe(200));
+      it('should return success status', () =>
+        expect(responseBox.body.status).toBe('success'));
+      it('should return a success message', () =>
+        expect(responseBox.body.data.message).toBe(
+          'Article successfully deleted'
+        ));
     });
   });
 });

@@ -6,6 +6,8 @@ const db = new Pool({
 });
 
 // db.on('connect', () => console.log('Connected to database...'));
-db.on('error', (e) => console.error(`Cannot connect to database...${e.message}`));
+db.on('error', (e) => {
+  console.error(`Cannot connect to database...${e.message}`);
+});
 
 module.exports = db;

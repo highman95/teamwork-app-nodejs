@@ -12,4 +12,8 @@ const fileFilter = (req, file, cb) => {
   cb(isGif ? null : new Error('Only GIF images are acceptable'), isGif);
 };
 
-module.exports = multer({ storage, fileFilter, limits: { fileSize: 1000000 } }).single('image');
+module.exports = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 1000000 },
+}).single('image');
