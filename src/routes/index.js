@@ -14,13 +14,14 @@ module.exports = (router) => {
   departmentRoutes(router);
 
   // set a default PING / Health-Check route
-  router.get('/ping', (req, res) =>
+  router.get('/ping', (_req, res) =>
     res.json({ status: 'success', error: 'Page Pongs...' })
   );
 
   // set a default route
-  router.use('*', (req, res, next) =>
-    next(new ReferenceError('Page no longer exists'))
-  );
+  router.use('*', (_req, _res, next) => {
+    next(new ReferenceError('Page no longer exists'));
+  });
+
   return router;
 };

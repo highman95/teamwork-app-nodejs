@@ -6,12 +6,12 @@ const options = {
   issuer: process.env.JWT_ISSUER,
 };
 
-module.exports.generateToken = (user) => {
+exports.generateToken = (user) => {
   return sign({ userId: user.id }, process.env.JWT_SECRET, options);
 };
 
-module.exports.verifyToken = (token) => {
+exports.verifyToken = (token) => {
   return verify(token, process.env.JWT_SECRET, options);
 };
 
-module.exports.TokenExpiredError = TokenExpiredError;
+exports.TokenExpiredError = TokenExpiredError;

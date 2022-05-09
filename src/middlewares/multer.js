@@ -1,14 +1,21 @@
 const multer = require('multer');
 
+const MIME_TYPES = {
+  'image/gif': '.gif',
+};
+
 const storage = multer.diskStorage({
-  // destination: (req, file, cb) => cb(null, 'public/images'),
-  filename: (req, file, cb) => {
-    cb(null, `capstone-${file.fieldname}-${Date.now()}.gif`);
+  destination: (_req, _file, cb) => {
+    cb(null, 'public/images');
+  },
+  filename: (_req, file, cb) => {
+    const extension = MIME_TYPES[file.mimetype];
+    cb(null, `capstone-${file.fieldname}-${Date.now()}${extension}`);
   },
 });
 
-const fileFilter = (req, file, cb) => {
-  const isGif = file.mimetype === 'image/gif';
+const fileFilter = (_req, file, cb) => {
+  const isGif = MIME_TYPES[file.mimetype] !== undefined;
   cb(isGif ? null : new Error('Only GIF images are acceptable'), isGif);
 };
 
