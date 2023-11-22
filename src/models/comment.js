@@ -1,5 +1,5 @@
 exports.create = async function (postId, comment, userId) {
-  if (!comment || !comment.trim()) {
+  if (!comment?.trim()) {
     throw new Error('Comment/statement is missing'); // 400
   }
 

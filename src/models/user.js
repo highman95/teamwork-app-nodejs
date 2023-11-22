@@ -9,9 +9,7 @@ exports.create = async function (
   email,
   password,
   gender,
-  address,
-  roleName,
-  departmentName
+  address
 ) {
   if ((await this.findByEmail(email)).id)
     throw new Error('E-mail address already exists'); // 409
@@ -27,39 +25,41 @@ exports.create = async function (
     params
   );
 
-  const role = await modelRole.findByName(roleName);
-  if (!role.id) throw new ReferenceError('Role does not exist'); // 404
+  return async function (roleName, departmentName) {
+    const role = await modelRole.findByName(roleName);
+    if (!role.id) throw new ReferenceError('Role does not exist'); // 404
 
-  const department = await modelDepartment.findByName(departmentName);
-  if (!department.id) throw new ReferenceError('Department does not exist'); // 404
+    const department = await modelDepartment.findByName(departmentName);
+    if (!department.id) throw new ReferenceError('Department does not exist'); // 404
 
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const input = [
-      firstName,
-      lastName,
-      email,
-      hashedPassword,
-      gender,
-      address,
-      role.id,
-      department.id,
-    ];
+    try {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const input = [
+        firstName,
+        lastName,
+        email,
+        hashedPassword,
+        gender,
+        address,
+        role.id,
+        department.id,
+      ];
 
-    // eslint-disable-next-line no-undef
-    const result = await db.query(
-      `INSERT INTO users (first_name, last_name, email, password, gender, address, role_id, department_id) 
+      // eslint-disable-next-line no-undef
+      const result = await db.query(
+        `INSERT INTO users (first_name, last_name, email, password, gender, address, role_id, department_id)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
-      input
-    );
-    return result.rows[0] || {};
-  } catch (e) {
-    throw new Error('User could not be saved');
-  }
+        input
+      );
+      return result.rows[0] || {};
+    } catch (e) {
+      throw new Error('User could not be saved');
+    }
+  };
 };
 
 exports.authenticate = async function (email, password) {
-  if (!password || !password.trim()) {
+  if (!password?.trim()) {
     throw new Error('Password cannot be blank'); // 400
   }
 

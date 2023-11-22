@@ -1,7 +1,7 @@
 const modelPost = require('./post');
 
 exports.create = async (title, content, userId) => {
-  if (!content || !content.trim()) throw new Error('Content is missing'); // 400
+  if (!content?.trim()) throw new Error('Content is missing'); // 400
 
   return modelPost.create(
     modelPost.types.ARTICLE_POST,
@@ -13,7 +13,7 @@ exports.create = async (title, content, userId) => {
 };
 
 exports.update = async (id, title, content) => {
-  if (!content || !content.trim()) throw new Error('Content is missing'); // 400
+  if (!content?.trim()) throw new Error('Content is missing'); // 400
   return modelPost.update(modelPost.types.ARTICLE_POST, id, title, content);
 };
 

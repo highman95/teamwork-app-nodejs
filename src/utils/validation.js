@@ -13,7 +13,7 @@ exports.validateParameters = (submissions, params) => {
       throw new Error(`Invalid Parameter - ${key} - supplied`); // 400
     }
 
-    if (!value || !value.trim()) {
+    if (!value?.trim()) {
       throw new Error(
         `${key
           .charAt(0)

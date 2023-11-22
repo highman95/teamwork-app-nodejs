@@ -25,6 +25,7 @@ describe('UserController Test Suite', () => {
   afterAll((done) => server.close(done));
 
   describe('POST /auth/create-user', () => {
+    let endPoint;
     let options = {};
 
     beforeAll(() => {
@@ -178,6 +179,7 @@ describe('UserController Test Suite', () => {
   });
 
   describe('POST /auth/signin', () => {
+    let endPoint;
     const testCredentials = {
       email: testData.email,
       password: testData.password,

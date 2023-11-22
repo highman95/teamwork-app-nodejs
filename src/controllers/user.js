@@ -20,10 +20,8 @@ exports.createOne = async (req, res, next) => {
       email,
       password,
       gender,
-      address,
-      jobRole,
-      department
-    );
+      address
+    )(jobRole, department);
     const token = generateToken(user);
 
     res.status(201).json({

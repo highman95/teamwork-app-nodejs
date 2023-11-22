@@ -4,7 +4,7 @@ exports.fetchAll = async () => {
 };
 
 exports.findByName = async (name) => {
-  if (!name || !name.trim()) throw new Error('Role cannot be empty'); // 400
+  if (!name?.trim()) throw new Error('Role cannot be empty'); // 400
 
   // eslint-disable-next-line no-undef
   const result = await db.query(

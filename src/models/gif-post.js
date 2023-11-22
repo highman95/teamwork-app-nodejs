@@ -2,7 +2,7 @@ const mediaManager = require('../configs/cloudinary');
 const modelPost = require('./post');
 
 exports.create = async (title, imageFile, userId) => {
-  if (!imageFile || !imageFile.path || !imageFile.path.trim()) {
+  if (!imageFile?.path?.trim()) {
     throw new Error('GIF image is missing'); // 400
   }
 
