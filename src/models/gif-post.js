@@ -1,3 +1,4 @@
+const fs = require("fs/promises");
 const mediaManager = require("../configs/cloudinary");
 const modelPost = require("./post");
 
@@ -8,10 +9,15 @@ exports.create = async (title, imageFile, userId) => {
 
   let response;
   try {
-    response = await mediaManager.uploadImage(imageFile.path);
+    const isTestEnv =
+      process.env.NODE_ENV === "test" || process.env.NODE_ENV === "undefined";
+
+    response = isTestEnv
+      ? { url: "https://" }
+      : await mediaManager.uploadImage(imageFile.path);
 
     // delete the file and save the cloudStorage info
-    // await fs.unlink(file.path);
+    await fs.unlink(imageFile.path);
   } catch (e) {
     console.error("[Cloudinary] Error: ", e.message || e.error.message);
     throw new Error("GIF image could not uploaded (Cloud)"); // 500
