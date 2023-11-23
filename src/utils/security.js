@@ -1,7 +1,7 @@
-const { sign, verify, TokenExpiredError } = require('jsonwebtoken');
+const { sign, verify, TokenExpiredError } = require("jsonwebtoken");
 
 const options = {
-  expiresIn: '24h',
+  expiresIn: "24h",
   subject: process.env.JWT_SUBJECT,
   issuer: process.env.JWT_ISSUER,
 };

@@ -1,9 +1,9 @@
-const { verifyToken, TokenExpiredError } = require('../utils/security');
+const { verifyToken, TokenExpiredError } = require("../utils/security");
 
-const auth = (req, _res, next) => {
-  const { token = '' } = req.headers; // .authorization.split(' ')[1];
+module.exports = (req, _res, next) => {
+  const { token = "" } = req.headers; // .authorization.split(' ')[1];
   if (!token?.trim()) {
-    next(new Error('Token is missing'));
+    next(new Error("Token is missing"));
     return;
   }
 
@@ -14,10 +14,8 @@ const auth = (req, _res, next) => {
   } catch (e) {
     next(
       new Error(
-        `Token is ${e.name === TokenExpiredError.name ? 'expired' : 'invalid'}`
+        `Token is ${e.name === TokenExpiredError.name ? "expired" : "invalid"}`
       )
     );
   }
 };
-
-module.exports = auth;

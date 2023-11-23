@@ -1,12 +1,12 @@
 /* eslint-disable no-undef */
-const departmentService = require('../../src/models/department');
+const departmentService = require("../../src/models/department");
 
-describe('Department-Service Test Suite', () => {
-  describe('Find Department', () => {
-    describe('Name is not specified', () => {
-      it('should return error message', (done) => {
+describe("Department-Service Test Suite", () => {
+  describe("Find Department", () => {
+    describe("Name is not specified", () => {
+      it("should return error message", (done) => {
         departmentService.findByName(null).catch((error) => {
-          expect(error.message).toBe('Department cannot be empty');
+          expect(error.message).toBe("Department cannot be empty");
           done();
         });
       });

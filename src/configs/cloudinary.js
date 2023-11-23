@@ -1,4 +1,4 @@
-const cloudinary = require('cloudinary').v2;
+const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -9,8 +9,8 @@ cloudinary.config({
 module.exports = {
   uploadImage: async (file, callBack) => {
     const options = {
-      resource_type: 'image',
-      folder: 'capstone-project/images/',
+      resource_type: "image",
+      folder: "capstone-project/images/",
     };
 
     return cloudinary.uploader.upload(file, options, callBack);

@@ -1,5 +1,5 @@
-const modelPost = require('../models/gif-post');
-const modelComment = require('../models/comment');
+const modelPost = require("../models/gif-post");
+const modelComment = require("../models/comment");
 
 exports.createPost = async (req, res, next) => {
   const {
@@ -13,9 +13,9 @@ exports.createPost = async (req, res, next) => {
     const { id: gifId, image_url: imageUrl, created_at: createdOn } = post;
 
     res.status(201).json({
-      status: 'success',
+      status: "success",
       data: {
-        message: 'GIF image successfully posted',
+        message: "GIF image successfully posted",
         imageUrl,
         gifId,
         title,
@@ -51,9 +51,9 @@ exports.createPostComment = async (req, res, next) => {
     const { created_at: createdOn } = postComment;
 
     res.status(201).json({
-      status: 'success',
+      status: "success",
       data: {
-        message: 'Comment successfully created',
+        message: "Comment successfully created",
         createdOn,
         gifTitle,
         comment,
@@ -83,7 +83,7 @@ exports.getPost = async (req, res, next) => {
     const { id, title, image_url: url, created_at: createdOn } = post;
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
         id,
         createdOn,
@@ -105,9 +105,9 @@ exports.deletePost = async (req, res, next) => {
   try {
     await modelPost.delete(gifId);
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
-        message: 'GIF post successfully deleted',
+        message: "GIF post successfully deleted",
       },
     });
   } catch (e) {

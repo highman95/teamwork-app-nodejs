@@ -1,4 +1,4 @@
-const modelPost = require('../models/post');
+const modelPost = require("../models/post");
 
 exports.getPosts = async (req, res, next) => {
   const { page = 1, chunk: limit = 10 } = req.query;
@@ -29,7 +29,7 @@ exports.getPosts = async (req, res, next) => {
 
     const pages = limit < 1 ? 1 : Math.ceil(totalCount / limit);
     const meta = { page, pages, totalCount };
-    res.status(200).json({ status: 'success', data: feeds, meta });
+    res.status(200).json({ status: "success", data: feeds, meta });
   } catch (e) {
     next(e);
   }

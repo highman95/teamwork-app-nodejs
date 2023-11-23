@@ -1,5 +1,5 @@
-const controller = require('../controllers/department');
+const controller = require("../controllers/department");
 
 module.exports = (router) => {
-  router.get('/departments', controller.getDepartments);
+  router.get("/departments", controller.getDepartments);
 };

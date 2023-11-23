@@ -1,5 +1,5 @@
-const modelPost = require('../models/article-post');
-const modelComment = require('../models/comment');
+const modelPost = require("../models/article-post");
+const modelComment = require("../models/comment");
 
 exports.createPost = async (req, res, next) => {
   const {
@@ -12,9 +12,9 @@ exports.createPost = async (req, res, next) => {
     const { id: articleId, created_at: createdOn } = post;
 
     res.status(201).json({
-      status: 'success',
+      status: "success",
       data: {
-        message: 'Article successfully posted',
+        message: "Article successfully posted",
         articleId,
         title,
         createdOn,
@@ -49,9 +49,9 @@ exports.createPostComment = async (req, res, next) => {
     const { created_at: createdOn } = postComment;
 
     res.status(201).json({
-      status: 'success',
+      status: "success",
       data: {
-        message: 'Comment successfully created',
+        message: "Comment successfully created",
         createdOn,
         articleTitle,
         article,
@@ -74,9 +74,9 @@ exports.updatePost = async (req, res, next) => {
     await modelPost.update(post.id, title, article);
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
-        message: 'Article successfully updated',
+        message: "Article successfully updated",
         title,
         article,
       },
@@ -105,7 +105,7 @@ exports.getPost = async (req, res, next) => {
     const { id, title, content: article, created_at: createdOn } = post;
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
         id,
         createdOn,
@@ -127,9 +127,9 @@ exports.deletePost = async (req, res, next) => {
   try {
     await modelPost.delete(articleId);
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
-        message: 'Article successfully deleted',
+        message: "Article successfully deleted",
       },
     });
   } catch (e) {

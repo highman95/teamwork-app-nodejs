@@ -1,39 +1,39 @@
 /* eslint-disable no-undef */
-const fs = require('fs');
-const request = require('request');
-const server = require('../../src/index');
-const { generateToken } = require('../../src/utils/security');
+const fs = require("fs");
+const request = require("request");
+const server = require("../../src/index");
+const { generateToken } = require("../../src/utils/security");
 
-describe('GifController Test Suite', () => {
+describe("GifController Test Suite", () => {
   let endPoint;
   let options = {};
   let gifId;
 
   beforeAll(() => {
     const { address, port } = server.address();
-    const hostName = address === '::' ? `http://localhost:${port}` : address;
+    const hostName = address === "::" ? `http://localhost:${port}` : address;
     endPoint = `${hostName}/api/v1/gifs`;
 
     options = { headers: { token: generateToken({ id: 1 }) } };
   });
 
-  // afterAll((done) => server.close(done));
+  //* afterAll((done) => server.close(done));
 
-  describe('POST /gifs', () => {
+  describe("POST /gifs", () => {
     let testFormData = {
-      image: fs.createReadStream('public/images/sample.gif'),
+      image: fs.createReadStream("public/images/sample.gif"),
     };
 
     beforeEach(() => {
       const data = {
-        title: 'Once upon a time in Tokyo',
-        image: fs.createReadStream('public/images/sample.gif'),
+        title: "Once upon a time in Tokyo",
+        image: fs.createReadStream("public/images/sample.gif"),
       };
 
       testFormData = { ...data };
     });
 
-    describe('Title is not specified', () => {
+    describe("Title is not specified", () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -41,7 +41,7 @@ describe('GifController Test Suite', () => {
           {
             url: endPoint,
             ...options,
-            formData: { ...testFormData, title: '' },
+            formData: { ...testFormData, title: "" },
             json: true,
           },
           (error, response, body) => {
@@ -51,15 +51,15 @@ describe('GifController Test Suite', () => {
         );
       });
 
-      it('should return statusCode 400', () =>
+      it("should return statusCode 400", () =>
         expect(responseBox.response.statusCode).toBe(400));
-      it('should return error status', () =>
-        expect(responseBox.body.status).toBe('error'));
-      it('should return a relevant error message', () =>
-        expect(responseBox.body.error).toBe('Title is missing'));
+      it("should return error status", () =>
+        expect(responseBox.body.status).toBe("error"));
+      it("should return a relevant error message", () =>
+        expect(responseBox.body.error).toBe("Title is missing"));
     });
 
-    describe('Image is not specified/uploaded', () => {
+    describe("Image is not specified/uploaded", () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -67,7 +67,7 @@ describe('GifController Test Suite', () => {
           {
             url: endPoint,
             ...options,
-            formData: { ...testFormData, image: '' },
+            formData: { ...testFormData, image: "" },
             json: true,
           },
           (error, response, body) => {
@@ -77,19 +77,19 @@ describe('GifController Test Suite', () => {
         );
       });
 
-      it('should return statusCode 400', () =>
+      it("should return statusCode 400", () =>
         expect(responseBox.response.statusCode).toBe(400));
-      it('should return error status', () =>
-        expect(responseBox.body.status).toBe('error'));
-      it('should return a relevant error message', () =>
-        expect(responseBox.body.error).toBe('GIF image is missing'));
+      it("should return error status", () =>
+        expect(responseBox.body.status).toBe("error"));
+      it("should return a relevant error message", () =>
+        expect(responseBox.body.error).toBe("GIF image is missing"));
     });
 
-    describe('Non-GIF image is uploaded', () => {
+    describe("Non-GIF image is uploaded", () => {
       let responseBox = {};
 
       beforeAll((done) => {
-        const image = fs.createReadStream('public/images/sample.jpg');
+        const image = fs.createReadStream("public/images/sample.jpg");
 
         request.post(
           {
@@ -105,15 +105,15 @@ describe('GifController Test Suite', () => {
         );
       });
 
-      it('should return statusCode 400', () =>
+      it("should return statusCode 400", () =>
         expect(responseBox.response.statusCode).toBe(400));
-      it('should return error status', () =>
-        expect(responseBox.body.status).toBe('error'));
-      it('should return a relevant error message', () =>
-        expect(responseBox.body.error).toBe('Only GIF images are acceptable'));
+      it("should return error status", () =>
+        expect(responseBox.body.status).toBe("error"));
+      it("should return a relevant error message", () =>
+        expect(responseBox.body.error).toBe("Only GIF images are acceptable"));
     });
 
-    describe('A title and GIF image are specified', () => {
+    describe("A title and GIF image are specified", () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -132,29 +132,34 @@ describe('GifController Test Suite', () => {
         );
       }, 15000);
 
-      it('should return statusCode 201', () =>
-        expect(responseBox.response.statusCode).toBe(201));
-      it('should return success status', () =>
-        expect(responseBox.body.status).toBe('success'));
-      it('should return a success message', () =>
+      it("should return statusCode 201", () => {
+        expect(responseBox.response.statusCode).toBe(201);
+      });
+      it("should return success status", () => {
+        expect(responseBox.body.status).toBe("success");
+      });
+      it("should return a success message", () => {
         expect(responseBox.body.data.message).toBe(
-          'GIF image successfully posted'
-        ));
-      it('should return the same title', () =>
-        expect(
-          testFormData.title === responseBox.body.data.title
-        ).toBeTruthy());
-      it("should return the gif's id", () =>
-        expect(responseBox.body.data.gifId).toBeDefined());
-      it("should return the gif post's imageUrl", () =>
-        expect(responseBox.body.data.imageUrl).toBeDefined());
-      it('should return the time-created', () =>
-        expect(responseBox.body.data.createdOn).toBeDefined());
+          "GIF image successfully posted"
+        );
+      });
+      it("should return the same title", () => {
+        expect(testFormData.title === responseBox.body.data.title).toBeTruthy();
+      });
+      it("should return the gif's id", () => {
+        expect(responseBox.body.data.gifId).toBeDefined();
+      });
+      it("should return the gif post's imageUrl", () => {
+        expect(responseBox.body.data.imageUrl).toBeDefined();
+      });
+      it("should return the time-created", () => {
+        expect(responseBox.body.data.createdOn).toBeDefined();
+      });
     });
   });
 
-  describe('GET /gifs/:gifId', () => {
-    describe('Invalid gifId is specified', () => {
+  describe("GET /gifs/:gifId", () => {
+    describe("Invalid gifId is specified", () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -167,15 +172,15 @@ describe('GifController Test Suite', () => {
         );
       });
 
-      it('should return statusCode 404', () =>
+      it("should return statusCode 404", () =>
         expect(responseBox.response.statusCode).toBe(404));
-      it('should return error status', () =>
-        expect(responseBox.body.status).toBe('error'));
-      it('should return a relevant error message', () =>
-        expect(responseBox.body.error).toBe('Post does not exist'));
+      it("should return error status", () =>
+        expect(responseBox.body.status).toBe("error"));
+      it("should return a relevant error message", () =>
+        expect(responseBox.body.error).toBe("Post does not exist"));
     });
 
-    describe('Valid gifId is specified', () => {
+    describe("Valid gifId is specified", () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -188,25 +193,25 @@ describe('GifController Test Suite', () => {
         );
       });
 
-      it('should return statusCode 200', () =>
+      it("should return statusCode 200", () =>
         expect(responseBox.response.statusCode).toBe(200));
-      it('should return success status', () =>
-        expect(responseBox.body.status).toBe('success'));
+      it("should return success status", () =>
+        expect(responseBox.body.status).toBe("success"));
       it("should return the gif post's title", () =>
         expect(responseBox.body.data.title).toBeDefined());
       it("should return the gif post's imageUrl", () =>
         expect(responseBox.body.data.url).toBeDefined());
       it("should return the gif post's comments", () =>
         expect(responseBox.body.data.comments).toBeDefined());
-      it('should return the time-created', () =>
+      it("should return the time-created", () =>
         expect(responseBox.body.data.createdOn).toBeDefined());
     });
   });
 
-  describe('POST /gifs/:gifId/comment', () => {
-    const testData = { comment: 'it is just a comment' };
+  describe("POST /gifs/:gifId/comment", () => {
+    const testData = { comment: "it is just a comment" };
 
-    describe('GIF comment is not specified', () => {
+    describe("GIF comment is not specified", () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -214,7 +219,7 @@ describe('GifController Test Suite', () => {
           {
             url: `${endPoint}/${gifId}/comment`,
             ...options,
-            form: { ...testData, comment: '' },
+            form: { ...testData, comment: "" },
             json: true,
           },
           (error, response, body) => {
@@ -224,15 +229,15 @@ describe('GifController Test Suite', () => {
         );
       });
 
-      it('should return statusCode 400', () =>
+      it("should return statusCode 400", () =>
         expect(responseBox.response.statusCode).toBe(400));
-      it('should return error status', () =>
-        expect(responseBox.body.status).toBe('error'));
-      it('should return a relevant error message', () =>
-        expect(responseBox.body.error).toBe('Comment/statement is missing'));
+      it("should return error status", () =>
+        expect(responseBox.body.status).toBe("error"));
+      it("should return a relevant error message", () =>
+        expect(responseBox.body.error).toBe("Comment/statement is missing"));
     });
 
-    describe('GIF comment is specified', () => {
+    describe("GIF comment is specified", () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -250,27 +255,27 @@ describe('GifController Test Suite', () => {
         );
       });
 
-      it('should return statusCode 201', () =>
+      it("should return statusCode 201", () =>
         expect(responseBox.response.statusCode).toBe(201));
-      it('should return success status', () =>
-        expect(responseBox.body.status).toBe('success'));
-      it('should return a success message', () =>
+      it("should return success status", () =>
+        expect(responseBox.body.status).toBe("success"));
+      it("should return a success message", () =>
         expect(responseBox.body.data.message).toBe(
-          'Comment successfully created'
+          "Comment successfully created"
         ));
-      it('should return the same comment', () =>
+      it("should return the same comment", () =>
         expect(
           testData.comment === responseBox.body.data.comment
         ).toBeTruthy());
       it("should return the gif post's title", () =>
         expect(responseBox.body.data.gifTitle).toBeDefined());
-      it('should return the time-created', () =>
+      it("should return the time-created", () =>
         expect(responseBox.body.data.createdOn).toBeDefined());
     });
   });
 
-  describe('DELETE /gifs/:gifId', () => {
-    describe('GIF id is specified', () => {
+  describe("DELETE /gifs/:gifId", () => {
+    describe("GIF id is specified", () => {
       let responseBox = {};
 
       beforeAll((done) => {
@@ -283,14 +288,17 @@ describe('GifController Test Suite', () => {
         );
       });
 
-      it('should return statusCode 200', () =>
-        expect(responseBox.response.statusCode).toBe(200));
-      it('should return success status', () =>
-        expect(responseBox.body.status).toBe('success'));
-      it('should return a success message', () =>
+      it("should return statusCode 200", () => {
+        expect(responseBox.response.statusCode).toBe(200);
+      });
+      it("should return success status", () => {
+        expect(responseBox.body.status).toBe("success");
+      });
+      it("should return a success message", () => {
         expect(responseBox.body.data.message).toBe(
-          'GIF post successfully deleted'
-        ));
+          "GIF post successfully deleted"
+        );
+      });
     });
   });
 });

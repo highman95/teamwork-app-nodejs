@@ -1,5 +1,5 @@
-const model = require('../models/user');
-const { generateToken } = require('../utils/security');
+const model = require("../models/user");
+const { generateToken } = require("../utils/security");
 
 exports.createOne = async (req, res, next) => {
   const {
@@ -25,11 +25,12 @@ exports.createOne = async (req, res, next) => {
     const token = generateToken(user);
 
     res.status(201).json({
-      status: 'success',
+      status: "success",
       data: {
-        message: 'User account successfully created',
+        message: "User account successfully created",
         token,
         userId: user.id,
+        firstName: user.first_name,
       },
     });
   } catch (e) {
@@ -45,7 +46,7 @@ exports.signIn = async (req, res, next) => {
     const token = generateToken(user);
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
         token,
         userId: user.id,
