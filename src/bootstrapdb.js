@@ -4,9 +4,7 @@ require("dotenv-expand").expand(require("dotenv").config());
 const db = require("./configs/db");
 
 console.log(
-  `This script bootstraps the database tables.
-   e.g. node bootstrapdb
-  `
+  "This script bootstraps the database tables. e.g. node bootstrapdb\n"
 );
 
 (async function () {
