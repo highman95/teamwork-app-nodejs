@@ -3,12 +3,14 @@
 [![Build Status](https://travis-ci.com/highman95/teamwork-app-nodejs.svg?branch=develop)](https://travis-ci.com/highman95/teamwork-app-nodejs)
 
 Teamwork app (built with NodeJS)
-<br>
+
 <br>
 
 ## Installation
-Rename the `.env-dist` to `.env`. Then, set the environment variable with placeholder values. 
+Rename the `.env-dist` file to `.env`. Then, set the environment variables with placeholder values. 
 The sample complete `.env` file is shown below:
+
+<br>
 
 **`Sample Configuration`**
 ```
