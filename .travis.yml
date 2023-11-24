@@ -2,3 +2,14 @@ language: node_js
 node_js:
   - lts/* # Long Term Support
 
+# cache:
+#   directories:
+#     ["node_modules"]
+# deploy:
+#   provider: heroku
+#   api_key:
+#     secure: {SECURE-KEY}
+#   app: teamwork-app-api-stage
+#   on:
+#     repo: highman95/teamwork-app-nodejs
+#     branch: develop

@@ -1,8 +1,6 @@
-const model = require('../models/role');
+const model = require("../models/role");
 
-module.exports = {
-    getRoles: async (req, res) => {
-        const roles = await model.fetchAll();
-        res.status(200).json({ status: 'success', data: roles });
-    },
+exports.getRoles = async (_req, res) => {
+  const roles = await model.fetchAll();
+  res.status(200).json({ status: "success", data: roles });
 };
