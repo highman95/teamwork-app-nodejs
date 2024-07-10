@@ -1,9 +1,14 @@
-require('dotenv').config();
+require("dotenv-expand").expand(require("dotenv").config());
 
-const app = require('./app');
+const app = require("./app");
 
-const server = app.listen(process.env.PORT || 3000, (error) => {
-    console.log(error ? `Error: ${error}...` : `Listening on PORT: ${server.address().port}`);
-});
+//* app.set('port', process.env.PORT || 3000);
+const server = app
+  .listen(process.env.PORT || 3000, () => {
+    console.log(`Listening on PORT: ${server.address().port}`);
+  })
+  .on("error", (error) => {
+    console.error("Error-event occurred: ", error.message);
+  });
 
 module.exports = server;
